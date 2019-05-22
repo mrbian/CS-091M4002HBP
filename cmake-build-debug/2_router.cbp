@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="2_router"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="2_router">
+				<Option output="/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/2_router" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/10.0.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 2_router"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="2_router/fast">
+				<Option output="/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/2_router" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/10.0.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 2_router/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/arp.c">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/arpcache.c">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/icmp.c">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/arp.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/arpcache.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/base.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/checksum.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/ether.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/hash.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/icmp.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/ip.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/list.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/log.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/packet.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/rtable.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/types.h">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/ip.c">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/ip_forwarding.c">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/main.c">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/packet.c">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/rtable.c">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/rtable_internal.c">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
