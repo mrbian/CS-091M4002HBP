@@ -177,33 +177,6 @@ arpcache.c.s:
 	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/arpcache.c.s
 .PHONY : arpcache.c.s
 
-arpcache_test.o: arpcache_test.c.o
-
-.PHONY : arpcache_test.o
-
-# target to build an object file
-arpcache_test.c.o:
-	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/arpcache_test.c.o
-.PHONY : arpcache_test.c.o
-
-arpcache_test.i: arpcache_test.c.i
-
-.PHONY : arpcache_test.i
-
-# target to preprocess a source file
-arpcache_test.c.i:
-	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/arpcache_test.c.i
-.PHONY : arpcache_test.c.i
-
-arpcache_test.s: arpcache_test.c.s
-
-.PHONY : arpcache_test.s
-
-# target to generate assembly for a file
-arpcache_test.c.s:
-	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/arpcache_test.c.s
-.PHONY : arpcache_test.c.s
-
 icmp.o: icmp.c.o
 
 .PHONY : icmp.o
@@ -393,6 +366,33 @@ rtable_internal.c.s:
 	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/rtable_internal.c.s
 .PHONY : rtable_internal.c.s
 
+test.o: test.c.o
+
+.PHONY : test.o
+
+# target to build an object file
+test.c.o:
+	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/test.c.o
+.PHONY : test.c.o
+
+test.i: test.c.i
+
+.PHONY : test.i
+
+# target to preprocess a source file
+test.c.i:
+	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/test.c.i
+.PHONY : test.c.i
+
+test.s: test.c.s
+
+.PHONY : test.s
+
+# target to generate assembly for a file
+test.c.s:
+	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/test.c.s
+.PHONY : test.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -408,9 +408,6 @@ help:
 	@echo "... arpcache.o"
 	@echo "... arpcache.i"
 	@echo "... arpcache.s"
-	@echo "... arpcache_test.o"
-	@echo "... arpcache_test.i"
-	@echo "... arpcache_test.s"
 	@echo "... icmp.o"
 	@echo "... icmp.i"
 	@echo "... icmp.s"
@@ -432,6 +429,9 @@ help:
 	@echo "... rtable_internal.o"
 	@echo "... rtable_internal.i"
 	@echo "... rtable_internal.s"
+	@echo "... test.o"
+	@echo "... test.i"
+	@echo "... test.s"
 .PHONY : help
 
 

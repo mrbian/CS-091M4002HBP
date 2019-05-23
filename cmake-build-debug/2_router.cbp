@@ -90,9 +90,6 @@
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/arpcache.c">
 			<Option target="2_router"/>
 		</Unit>
-		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/arpcache_test.c">
-			<Option target="2_router"/>
-		</Unit>
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/icmp.c">
 			<Option target="2_router"/>
 		</Unit>
@@ -132,6 +129,9 @@
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/rtable.h">
 			<Option target="2_router"/>
 		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/test.h">
+			<Option target="2_router"/>
+		</Unit>
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/types.h">
 			<Option target="2_router"/>
 		</Unit>
@@ -151,6 +151,9 @@
 			<Option target="2_router"/>
 		</Unit>
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/rtable_internal.c">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/test.c">
 			<Option target="2_router"/>
 		</Unit>
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/CMakeLists.txt">

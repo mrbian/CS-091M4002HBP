@@ -6,7 +6,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_C
   "/Users/macbook/Desktop/静态路由转发实验/2-router/arp.c" "/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles/2_router.dir/arp.c.o"
   "/Users/macbook/Desktop/静态路由转发实验/2-router/arpcache.c" "/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles/2_router.dir/arpcache.c.o"
-  "/Users/macbook/Desktop/静态路由转发实验/2-router/arpcache_test.c" "/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles/2_router.dir/arpcache_test.c.o"
   "/Users/macbook/Desktop/静态路由转发实验/2-router/icmp.c" "/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles/2_router.dir/icmp.c.o"
   "/Users/macbook/Desktop/静态路由转发实验/2-router/ip.c" "/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles/2_router.dir/ip.c.o"
   "/Users/macbook/Desktop/静态路由转发实验/2-router/ip_forwarding.c" "/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles/2_router.dir/ip_forwarding.c.o"
@@ -14,6 +13,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "/Users/macbook/Desktop/静态路由转发实验/2-router/packet.c" "/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles/2_router.dir/packet.c.o"
   "/Users/macbook/Desktop/静态路由转发实验/2-router/rtable.c" "/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles/2_router.dir/rtable.c.o"
   "/Users/macbook/Desktop/静态路由转发实验/2-router/rtable_internal.c" "/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles/2_router.dir/rtable_internal.c.o"
+  "/Users/macbook/Desktop/静态路由转发实验/2-router/test.c" "/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles/2_router.dir/test.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")
 

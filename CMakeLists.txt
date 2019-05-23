@@ -28,4 +28,4 @@ add_executable(2_router
         main.c
         packet.c
         rtable.c
-        rtable_internal.c arpcache_test.c)
+        rtable_internal.c test.c include/test.h)

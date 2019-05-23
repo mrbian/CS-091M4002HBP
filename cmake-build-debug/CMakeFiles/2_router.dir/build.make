@@ -273,28 +273,28 @@ CMakeFiles/2_router.dir/rtable_internal.c.o.provides: CMakeFiles/2_router.dir/rt
 CMakeFiles/2_router.dir/rtable_internal.c.o.provides.build: CMakeFiles/2_router.dir/rtable_internal.c.o
 
 
-CMakeFiles/2_router.dir/arpcache_test.c.o: CMakeFiles/2_router.dir/flags.make
-CMakeFiles/2_router.dir/arpcache_test.c.o: ../arpcache_test.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/2_router.dir/arpcache_test.c.o"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/2_router.dir/arpcache_test.c.o   -c /Users/macbook/Desktop/静态路由转发实验/2-router/arpcache_test.c
+CMakeFiles/2_router.dir/test.c.o: CMakeFiles/2_router.dir/flags.make
+CMakeFiles/2_router.dir/test.c.o: ../test.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/2_router.dir/test.c.o"
+	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/2_router.dir/test.c.o   -c /Users/macbook/Desktop/静态路由转发实验/2-router/test.c
 
-CMakeFiles/2_router.dir/arpcache_test.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/2_router.dir/arpcache_test.c.i"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/macbook/Desktop/静态路由转发实验/2-router/arpcache_test.c > CMakeFiles/2_router.dir/arpcache_test.c.i
+CMakeFiles/2_router.dir/test.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/2_router.dir/test.c.i"
+	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/macbook/Desktop/静态路由转发实验/2-router/test.c > CMakeFiles/2_router.dir/test.c.i
 
-CMakeFiles/2_router.dir/arpcache_test.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/2_router.dir/arpcache_test.c.s"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/macbook/Desktop/静态路由转发实验/2-router/arpcache_test.c -o CMakeFiles/2_router.dir/arpcache_test.c.s
+CMakeFiles/2_router.dir/test.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/2_router.dir/test.c.s"
+	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/macbook/Desktop/静态路由转发实验/2-router/test.c -o CMakeFiles/2_router.dir/test.c.s
 
-CMakeFiles/2_router.dir/arpcache_test.c.o.requires:
+CMakeFiles/2_router.dir/test.c.o.requires:
 
-.PHONY : CMakeFiles/2_router.dir/arpcache_test.c.o.requires
+.PHONY : CMakeFiles/2_router.dir/test.c.o.requires
 
-CMakeFiles/2_router.dir/arpcache_test.c.o.provides: CMakeFiles/2_router.dir/arpcache_test.c.o.requires
-	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/arpcache_test.c.o.provides.build
-.PHONY : CMakeFiles/2_router.dir/arpcache_test.c.o.provides
+CMakeFiles/2_router.dir/test.c.o.provides: CMakeFiles/2_router.dir/test.c.o.requires
+	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/test.c.o.provides.build
+.PHONY : CMakeFiles/2_router.dir/test.c.o.provides
 
-CMakeFiles/2_router.dir/arpcache_test.c.o.provides.build: CMakeFiles/2_router.dir/arpcache_test.c.o
+CMakeFiles/2_router.dir/test.c.o.provides.build: CMakeFiles/2_router.dir/test.c.o
 
 
 # Object files for target 2_router
@@ -308,7 +308,7 @@ CMakeFiles/2_router.dir/arpcache_test.c.o.provides.build: CMakeFiles/2_router.di
 "CMakeFiles/2_router.dir/packet.c.o" \
 "CMakeFiles/2_router.dir/rtable.c.o" \
 "CMakeFiles/2_router.dir/rtable_internal.c.o" \
-"CMakeFiles/2_router.dir/arpcache_test.c.o"
+"CMakeFiles/2_router.dir/test.c.o"
 
 # External object files for target 2_router
 2_router_EXTERNAL_OBJECTS =
@@ -322,7 +322,7 @@ CMakeFiles/2_router.dir/arpcache_test.c.o.provides.build: CMakeFiles/2_router.di
 2_router: CMakeFiles/2_router.dir/packet.c.o
 2_router: CMakeFiles/2_router.dir/rtable.c.o
 2_router: CMakeFiles/2_router.dir/rtable_internal.c.o
-2_router: CMakeFiles/2_router.dir/arpcache_test.c.o
+2_router: CMakeFiles/2_router.dir/test.c.o
 2_router: CMakeFiles/2_router.dir/build.make
 2_router: CMakeFiles/2_router.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/macbook/Desktop/静态路由转发实验/2-router/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking C executable 2_router"
@@ -342,7 +342,7 @@ CMakeFiles/2_router.dir/requires: CMakeFiles/2_router.dir/main.c.o.requires
 CMakeFiles/2_router.dir/requires: CMakeFiles/2_router.dir/packet.c.o.requires
 CMakeFiles/2_router.dir/requires: CMakeFiles/2_router.dir/rtable.c.o.requires
 CMakeFiles/2_router.dir/requires: CMakeFiles/2_router.dir/rtable_internal.c.o.requires
-CMakeFiles/2_router.dir/requires: CMakeFiles/2_router.dir/arpcache_test.c.o.requires
+CMakeFiles/2_router.dir/requires: CMakeFiles/2_router.dir/test.c.o.requires
 
 .PHONY : CMakeFiles/2_router.dir/requires
 

@@ -5,6 +5,7 @@
 #include "ip.h"
 #include "icmp.h"
 #include "rtable.h"
+#include "test.h"
 
 #include "log.h"
 
@@ -277,6 +278,6 @@ int main(int argc, const char **argv)
 //
 //	ustack_run();
 
-
+    arpcache_test();
 	return 0;
 }
