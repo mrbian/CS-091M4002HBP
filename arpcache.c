@@ -64,9 +64,7 @@ int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
     for (i = 0; i < MAX_ARP_SIZE; i += 1) {
         if(arpcache.entries[i].ip4 == ip4) {
             flag = 1;                           // flag置为找到: 1
-            for (j = 0; j< ETH_ALEN; j += 1) {  // MAC地址赋值
-                mac[j] = arpcache.entries[i].mac[j];
-            }
+            memcpy(arpcache.entries[i].mac, mac, sizeof(u8) * ETH_ALEN);  // MAC地址赋值
         }
     }
 
@@ -87,11 +85,10 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
     // 若缓存中已有对应IPv4地址的包，则将包插入对应链表；
     // 若缓存中没有，则创建链表；
 
-    struct list_head * next = arpcache.req_list.next;
     int flag = 0; // 默认未找到
     // 遍历ARP缓存链表中的第一层链表
     struct arp_req *ele = NULL;
-    list_for_each_entry(ele, arpcache.req_list, list) {
+    list_for_each_entry(ele, &arpcache.req_list, list) {            // 注意这里是&arpcache.req_list而不是arpcache.req_list，因为宏定义里面用的是->操作符，所以必须传入结构体指针，而不是结构体变量
         if (ele->ip4 == ip4) {  // 若找到
             flag = 1;
             struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
@@ -102,6 +99,8 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
             list_add_tail(new, &ele->cached_packets);                                                           // 将包对象串上去
         }
     }
+
+    // 若未找到
     if(flag == 0) {
         // 先新建缓存对象
         struct arp_req *new_req = (struct arp_req *)malloc(sizeof(struct arp_req));     // 新建缓存对象
@@ -128,7 +127,6 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 	fprintf(stderr, "TODO: insert ip->mac entry, and send all the pending packets.\n");
     // 向ARP表中插入一个IP到MAC地址映射条目
     // 遍历缓存列表，如果有对应IP地址的待决包，则发送出去
-
 
 }
 
