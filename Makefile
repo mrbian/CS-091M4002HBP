@@ -1,5 +1,6 @@
 TARGET = router
 
+default: $(TARGET)
 all: $(TARGET)
 
 CC = gcc

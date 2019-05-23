@@ -93,9 +93,6 @@
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/icmp.c">
 			<Option target="2_router"/>
 		</Unit>
-		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/all.h">
-			<Option target="2_router"/>
-		</Unit>
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/include/arp.h">
 			<Option target="2_router"/>
 		</Unit>

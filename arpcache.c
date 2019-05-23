@@ -9,7 +9,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <signal.h>
-#include <include/arpcache.h>
+#include <arpcache.h>
 
 static arpcache_t arpcache;  // arpcache变量
 
@@ -90,12 +90,6 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
     struct list_head * next = arpcache.req_list.next;
     int flag = 0; // 默认未找到
     // 遍历已有链表
-    while(next) {
-        if(next->ip4 == ip4) {
-            flag = 1;
-        }
-        next = next->next;
-    }
 }
 
 // insert the IP->mac mapping into arpcache, if there are pending packets
