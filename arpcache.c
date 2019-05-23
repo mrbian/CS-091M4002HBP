@@ -90,16 +90,16 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
     struct list_head * next = arpcache.req_list.next;
     int flag = 0; // 默认未找到
     // 遍历ARP缓存链表中的第一层链表
-    struct arp_req ele = NULL;
+    struct arp_req *ele = NULL;
     list_for_each_entry(ele, arpcache.req_list, list) {
-        if (ele.ip4 == ip4) {  // 若找到
+        if (ele->ip4 == ip4) {  // 若找到
             flag = 1;
             struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
             new_pkt->packet = packet;
             new_pkt->len = len;
             struct list_head * new = (struct list_head *)malloc(sizeof(struct list_head));                     // 新建指针
             new_pkt->list = *new;
-            list_add_tail(new, &ele.cached_packets);                                                           // 将包对象串上去
+            list_add_tail(new, &ele->cached_packets);                                                           // 将包对象串上去
         }
     }
     if(flag == 0) {
