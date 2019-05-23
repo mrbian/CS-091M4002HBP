@@ -11,33 +11,33 @@
 #define ARP_ENTRY_TIMEOUT 15
 #define ARP_REQUEST_MAX_RETRIES	5
 
-struct cached_pkt {
+struct cached_pkt {  // 缓存的包结构
 	struct list_head list;
 	char *packet;
 	int len;
 };
 
-struct arp_req {
-	struct list_head list;
+struct arp_req {  // 等待ARP回复的包缓存，二维链表结构
+	struct list_head list;  // 指向前一个和后一个arp_req的指针结构体
 	iface_info_t *iface;
 	u32 ip4;
 	time_t sent;
 	int retries;
-	struct list_head cached_packets;
+	struct list_head cached_packets;  // 自身维护的链表
 };
 
-struct arp_cache_entry {
-	u32 ip4; 	// stored in host byte order
+struct arp_cache_entry {  // ARP表中的一个条目
+	u32 ip4; 	// stored in host byte order IP地址，本地字节序
 	u8 mac[ETH_ALEN];
 	time_t added;
 	int valid;
 };
 
-typedef struct {
-	struct arp_cache_entry entries[MAX_ARP_SIZE];
-	struct list_head req_list;
-	pthread_mutex_t lock;
-	pthread_t thread;
+typedef struct {  // ARP表
+	struct arp_cache_entry entries[MAX_ARP_SIZE]; // table行数组
+	struct list_head req_list;  // 等待ARP回复的包结构
+	pthread_mutex_t lock;  // ARP表维护线程
+	pthread_t thread; // ARP表维护线程
 } arpcache_t;
 
 void arpcache_init();

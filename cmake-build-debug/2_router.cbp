@@ -44,6 +44,8 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add directory="/Users/macbook/Desktop/静态路由转发实验/2-router"/>
+					<Add directory="/Users/macbook/Desktop/静态路由转发实验/2-router/include"/>
 					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/10.0.0/include"/>
@@ -65,6 +67,8 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add directory="/Users/macbook/Desktop/静态路由转发实验/2-router"/>
+					<Add directory="/Users/macbook/Desktop/静态路由转发实验/2-router/include"/>
 					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/10.0.0/include"/>
@@ -144,6 +148,9 @@
 			<Option target="2_router"/>
 		</Unit>
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/rtable_internal.c">
+			<Option target="2_router"/>
+		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/test.c">
 			<Option target="2_router"/>
 		</Unit>
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/CMakeLists.txt">

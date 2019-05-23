@@ -11,8 +11,8 @@
 #define ETH_P_ARP		0x0806
 
 struct ether_header {
-	u8 ether_dhost[ETH_ALEN];
-	u8 ether_shost[ETH_ALEN];
+	u8 ether_dhost[ETH_ALEN];		// 目的MAC地址
+	u8 ether_shost[ETH_ALEN];		// 源MAC地址
 	u16 ether_type;
 };
 

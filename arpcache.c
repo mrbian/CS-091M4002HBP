@@ -9,8 +9,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <signal.h>
+#include <include/arpcache.h>
 
-static arpcache_t arpcache;
+static arpcache_t arpcache;  // arpcache变量
 
 // initialize IP->mac mapping, request list, lock and sweeping thread
 void arpcache_init()
@@ -54,7 +55,22 @@ void arpcache_destroy()
 int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
 {
 	fprintf(stderr, "TODO: lookup ip address in arp cache.\n");
-	return 0;
+    // 遍历ARP表，尝试找到ip4对应的mac地址
+    // 若找到，将mac数组各变量替换后返回1；
+    // 若未找到，返回0；
+    int i = 0;
+    int j = 0;
+    int flag = 0;  // 默认未找到: 0
+    for (i = 0; i < MAX_ARP_SIZE; i += 1) {
+        if(arpcache.entries[i].ip4 == ip4) {
+            flag = 1;                           // flag置为找到: 1
+            for (j = 0; j< ETH_ALEN; j += 1) {  // MAC地址赋值
+                mac[j] = arpcache.entries[i].mac[j];
+            }
+        }
+    }
+
+	return flag;
 }
 
 // append the packet to arpcache
@@ -67,6 +83,19 @@ int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
 void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 {
 	fprintf(stderr, "TODO: append the ip address if lookup failed, and send arp request if necessary.\n");
+    // （若IPv4地址对应MAC地址在本主机未找到）将包加入ARP缓存
+    // 若缓存中已有对应IPv4地址的包，则将包插入对应链表；
+    // 若缓存中没有，则创建链表；
+
+    struct list_head * next = arpcache.req_list.next;
+    int flag = 0; // 默认未找到
+    // 遍历已有链表
+    while(next) {
+        if(next->ip4 == ip4) {
+            flag = 1;
+        }
+        next = next->next;
+    }
 }
 
 // insert the IP->mac mapping into arpcache, if there are pending packets

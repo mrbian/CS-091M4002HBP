@@ -18,6 +18,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <linux/if_packet.h>
+#include <include/base.h>
 
 ustack_t *instance;
 
@@ -270,9 +271,15 @@ int main(int argc, const char **argv)
 		exit(1);
 	}
 
-	init_ustack();
 
-	ustack_run();
+
+	init_ustack();
+	iface_info_t *iface = NULL;
+	list_for_each_entry(iface, &instance->iface_list, list) {
+		printf("%s", iface->name);
+	}
+//
+//	ustack_run();
 
 	return 0;
 }

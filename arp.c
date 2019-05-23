@@ -16,6 +16,8 @@
 void arp_send_request(iface_info_t *iface, u32 dst_ip)
 {
 	fprintf(stderr, "TODO: send arp request when lookup failed in arpcache.\n");
+    // 先查询arpcache
+//    arpcache_lookup();
 }
 
 // send an arp reply packet: encapsulate an arp reply packet, send it out

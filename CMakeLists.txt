@@ -3,6 +3,9 @@ project(2_router)
 
 set(CMAKE_CXX_STANDARD 11)
 
+include_directories(/Users/macbook/Desktop/静态路由转发实验/2-router)
+include_directories(/Users/macbook/Desktop/静态路由转发实验/2-router/include)
+
 add_executable(2_router
         include/arp.h
         include/arpcache.h
@@ -25,4 +28,4 @@ add_executable(2_router
         main.c
         packet.c
         rtable.c
-        rtable_internal.c)
+        rtable_internal.c test.c)
