@@ -7,6 +7,7 @@ include_directories(/Users/macbook/Desktop/静态路由转发实验/2-router)
 include_directories(/Users/macbook/Desktop/静态路由转发实验/2-router/include)
 
 add_executable(2_router
+        include/all.h
         include/arp.h
         include/arpcache.h
         include/base.h
@@ -28,4 +29,4 @@ add_executable(2_router
         main.c
         packet.c
         rtable.c
-        rtable_internal.c test.c)
+        rtable_internal.c)

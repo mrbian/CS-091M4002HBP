@@ -8,7 +8,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/2_router.dir/packet.c.o"
   "CMakeFiles/2_router.dir/rtable.c.o"
   "CMakeFiles/2_router.dir/rtable_internal.c.o"
-  "CMakeFiles/2_router.dir/test.c.o"
   "2_router.pdb"
   "2_router"
 )

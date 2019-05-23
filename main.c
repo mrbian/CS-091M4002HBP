@@ -20,6 +20,8 @@
 #include <linux/if_packet.h>
 #include <include/base.h>
 
+#include "all.h"
+
 ustack_t *instance;
 
 // get the interface according to file descriptor (fd)
