@@ -177,6 +177,33 @@ arpcache.c.s:
 	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/arpcache.c.s
 .PHONY : arpcache.c.s
 
+arpcache_test.o: arpcache_test.c.o
+
+.PHONY : arpcache_test.o
+
+# target to build an object file
+arpcache_test.c.o:
+	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/arpcache_test.c.o
+.PHONY : arpcache_test.c.o
+
+arpcache_test.i: arpcache_test.c.i
+
+.PHONY : arpcache_test.i
+
+# target to preprocess a source file
+arpcache_test.c.i:
+	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/arpcache_test.c.i
+.PHONY : arpcache_test.c.i
+
+arpcache_test.s: arpcache_test.c.s
+
+.PHONY : arpcache_test.s
+
+# target to generate assembly for a file
+arpcache_test.c.s:
+	$(MAKE) -f CMakeFiles/2_router.dir/build.make CMakeFiles/2_router.dir/arpcache_test.c.s
+.PHONY : arpcache_test.c.s
+
 icmp.o: icmp.c.o
 
 .PHONY : icmp.o
@@ -381,6 +408,9 @@ help:
 	@echo "... arpcache.o"
 	@echo "... arpcache.i"
 	@echo "... arpcache.s"
+	@echo "... arpcache_test.o"
+	@echo "... arpcache_test.i"
+	@echo "... arpcache_test.s"
 	@echo "... icmp.o"
 	@echo "... icmp.i"
 	@echo "... icmp.s"

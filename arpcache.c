@@ -89,7 +89,35 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 
     struct list_head * next = arpcache.req_list.next;
     int flag = 0; // 默认未找到
-    // 遍历已有链表
+    // 遍历ARP缓存链表中的第一层链表
+    struct arp_req ele = NULL;
+    list_for_each_entry(ele, arpcache.req_list, list) {
+        if (ele.ip4 == ip4) {  // 若找到
+            flag = 1;
+            struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
+            new_pkt->packet = packet;
+            new_pkt->len = len;
+            struct list_head * new = (struct list_head *)malloc(sizeof(struct list_head));                     // 新建指针
+            new_pkt->list = *new;
+            list_add_tail(new, &ele.cached_packets);                                                           // 将包对象串上去
+        }
+    }
+    if(flag == 0) {
+        // 先新建缓存对象
+        struct arp_req *new_req = (struct arp_req *)malloc(sizeof(struct arp_req));     // 新建缓存对象
+        struct list_head *new = (struct list_head *)malloc(sizeof(struct list_head));   // 新建指针
+        new_req->list = *new;
+        list_add_tail(new, &arpcache.req_list);                                         // 将缓存对象串上去
+
+        // 再新建包对象并加入缓存对象的链表
+        init_list_head(&new_req->cached_packets);                                       // 初始化包节点
+        struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
+        new_pkt->packet = packet;
+        new_pkt->len = len;
+        new = (struct list_head *)malloc(sizeof(struct list_head));                     // 新建指针
+        new_pkt->list = *new;
+        list_add_tail(new, &new_req->cached_packets);                                   // 将包对象串上去
+    }
 }
 
 // insert the IP->mac mapping into arpcache, if there are pending packets
@@ -98,6 +126,10 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 {
 	fprintf(stderr, "TODO: insert ip->mac entry, and send all the pending packets.\n");
+    // 向ARP表中插入一个IP到MAC地址映射条目
+    // 遍历缓存列表，如果有对应IP地址的待决包，则发送出去
+
+
 }
 
 // sweep arpcache periodically

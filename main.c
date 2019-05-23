@@ -266,20 +266,17 @@ void ustack_run()
 
 int main(int argc, const char **argv)
 {
-	if (getuid() && geteuid()) {
-		printf("Permission denied, should be superuser!\n");
-		exit(1);
-	}
 
+//	if (getuid() && geteuid()) {
+//		printf("Permission denied, should be superuser!\n");
+//		exit(1);
+//	}
 
-
-	init_ustack();
-	iface_info_t *iface = NULL;
-	list_for_each_entry(iface, &instance->iface_list, list) {
-		printf("%s", iface->name);
-	}
+//	init_ustack();
+//	iface_info_t *iface = NULL;
 //
 //	ustack_run();
+
 
 	return 0;
 }

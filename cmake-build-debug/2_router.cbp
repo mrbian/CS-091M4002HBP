@@ -90,6 +90,9 @@
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/arpcache.c">
 			<Option target="2_router"/>
 		</Unit>
+		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/arpcache_test.c">
+			<Option target="2_router"/>
+		</Unit>
 		<Unit filename="/Users/macbook/Desktop/静态路由转发实验/2-router/icmp.c">
 			<Option target="2_router"/>
 		</Unit>
