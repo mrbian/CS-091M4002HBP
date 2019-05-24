@@ -148,8 +148,8 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 	// 然后遍历缓存列表，如果有对应IP地址的待决包，将MAC地址填充好发送出去
 	struct arp_req *req = NULL;
 	struct cached_pkt *pkt = NULL;
-	char *macstr = (char *)malloc(sizeof(char) * 30);
-	char *tmpstr = (char *)malloc(sizeof(char) * 10);
+	char *macstr = "";
+	char *tmpstr = "";
 	list_for_each_entry(req, &arpcache.req_list, list) {
 		if(req->ip4 == ip4) {
 			req->retries += 1;   // 记录发送次数和时间
