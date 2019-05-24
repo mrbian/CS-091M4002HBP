@@ -166,7 +166,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 				// todo: 这样填充header是否正确？
 				strcpy(tmpstr, macstr);
 				strcat(tmpstr, pkt->packet);
-				memcpy(pkt->packet, macstr, sizeof(char) * strlen(macstr));
+				memcpy(pkt->packet, tmpstr, sizeof(char) * strlen(macstr));
 
 				pkt->len = (int)strlen(pkt->packet);
 				printf("Send %s \n", pkt->packet);
