@@ -15,7 +15,7 @@ LIBIP = libipstack.a
 LIBIP_SRCS = arp.c arpcache.c icmp.c ip.c packet.c rtable.c rtable_internal.c test.c
 LIBIP_OBJS = $(patsubst %.c,%.o,$(LIBIP_SRCS))
 
-HDRS = ./include/*.h
+HDRS = ./include/*.h ./*.h
 
 $(LIBIP_OBJS) : %.o : %.c include/*.h
 	$(CC) -c $(CFLAGS) $< -o $@

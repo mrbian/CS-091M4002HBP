@@ -11,7 +11,6 @@
 #include <unistd.h>
 #include <signal.h>
 #include <arpcache.h>
-#include <include/arpcache.h>
 
 // 生成一个路由端口
 iface_info_t * iface_init() {
