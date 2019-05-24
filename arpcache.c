@@ -164,7 +164,8 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
 
 				// todo: 这样填充header是否正确？
-				strcat(macstr, pkt->packet);
+				strcpy(tmpstr, macstr);
+				strcat(tmpstr, pkt->packet);
 				memcpy(pkt->packet, macstr, sizeof(char) * strlen(macstr));
 
 				pkt->len = (int)strlen(pkt->packet);
