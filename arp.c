@@ -31,6 +31,7 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 	arp_req_pkt->arp_tpa = dst_ip;
 	arp_req_pkt->arp_hln = ETH_ALEN;
 	arp_req_pkt->arp_pln = sizeof(dst_ip);   // todo: 这里是protocol address length？
+	printf("fuck?");
 	char *packet = (char *)arp_req_pkt;
 	printf("%s", packet);
 }
