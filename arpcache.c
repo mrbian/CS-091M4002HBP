@@ -111,13 +111,16 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
         list_add_tail(new, &arpcache.req_list);                                         // 将缓存对象串上去
 
         // 再新建包对象并加入缓存对象的链表
-        init_list_head(&new_req->cached_packets);                                       // 初始化包节点
-        struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
-        new_pkt->packet = packet;
-        new_pkt->len = len;
-        new = (struct list_head *)malloc(sizeof(struct list_head));                     // 新建指针
-        new_pkt->list = *new;
-        list_add_tail(new, &new_req->cached_packets);                                   // 将包对象串上去
+//        init_list_head(&new_req->cached_packets);                                       // 初始化包节点
+//        struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
+//        new_pkt->packet = packet;
+//        new_pkt->len = len;
+//        new = (struct list_head *)malloc(sizeof(struct list_head));                     // 新建指针
+//        new_pkt->list = *new;
+//        list_add_tail(new, &new_req->cached_packets);                                   // 将包对象串上去
+
+        // todo: send arp request
+
     }
 }
 
