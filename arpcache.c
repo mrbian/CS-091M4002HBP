@@ -91,7 +91,7 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
     // 遍历ARP缓存链表中的第一层链表
     struct arp_req *ele = NULL;
     list_for_each_entry(ele, &arpcache.req_list, list) {            // 注意这里是&arpcache.req_list而不是arpcache.req_list，因为宏定义里面用的是->操作符，所以必须传入结构体指针，而不是结构体变量
-		printf("???");
+		printf("%d\n", ele->ip4);
         if (ele->ip4 == ip4) {  // 若找到
 			printf("%d founded! \n", ip4);
             flag = 1;
