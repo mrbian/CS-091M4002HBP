@@ -36,7 +36,7 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 //	printf("size of packet is %d \n", (int) sizeof(packet));   // todo: 64位系统指针是8B  // 结束符'\0'对应的16进制是什么？
 	struct ether_arp *new = (struct ether_arp*)malloc(sizeof(struct ether_arp));
 	memcpy(new, packet, sizeof(struct ether_arp));
-	printf("%d \n", new->arp_spa);
+	printf("%d  %d \n", dst_ip, new->arp_tpa);
 }
 
 // send an arp reply packet: encapsulate an arp reply packet, send it out
