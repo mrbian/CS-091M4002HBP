@@ -157,8 +157,8 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 			pkt = NULL;
 			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
 				for(i = 0; i < ETH_ALEN; i += 1) { 					 // todo: 这样填充header是否正确？
-					sprintf(macstr, "%d", mac[i]);
-					strcat(macstr, pkt->packet);
+//					sprintf(macstr, "%d", mac[i]);
+//					strcat(macstr, pkt->packet);
 				}
 				pkt->len = (int)strlen(pkt->packet);
 				printf("Send %s \n", pkt->packet);
