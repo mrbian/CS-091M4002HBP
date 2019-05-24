@@ -32,11 +32,9 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 	arp_req_pkt->arp_tpa = dst_ip;
 	arp_req_pkt->arp_hln = ETH_ALEN;
 	arp_req_pkt->arp_pln = sizeof(dst_ip);   // todo: 这里是protocol address length？
-
-//	arp_req_pkt->arp_hrd = 0xFF;
-//	arp_req_pkt->arp_pro = 0xFF;
 	memcpy(packet, arp_req_pkt, sizeof(struct ether_arp));
-	printf("size of packet is %d \n", (int)strlen(packet));
+	printf("len of packet is %d \n", (int)strlen(packet));  // 这里打印出来的长度并不重要，因为这个字符数组随时有可能遇到关闭的情况，这样的话packet怎么能用char*呢？
+	printf("size of packet is %d \n", (int) sizeof(packet));
 }
 
 // send an arp reply packet: encapsulate an arp reply packet, send it out
