@@ -21,7 +21,7 @@
 #include <linux/if_packet.h>
 #include <base.h>
 
-ustack_t *instance;
+ustack_t *instance; 
 
 // get the interface according to file descriptor (fd)
 static iface_info_t *fd_to_iface(int fd)

@@ -11,7 +11,8 @@
 #include <signal.h>
 #include <arpcache.h>
 
-static arpcache_t arpcache;  // arpcache变量
+static arpcache_t arpcache;  // todo: 使用static修饰以后，就只能在本源文件中可见，并不能在整个工程中可见。
+							 //		  如果不加static，所有函数，变量默认都是extern修饰的。可以在其他文件中被引入。
 
 // initialize IP->mac mapping, request list, lock and sweeping thread
 void arpcache_init()
@@ -151,4 +152,19 @@ void *arpcache_sweep(void *arg)
 	}
 
 	return NULL;
+}
+
+
+// 遍历并打印所有的缓存包
+void print_arp_cache_list() {
+	printf("print all cached packet \n");
+	struct arp_req *req = NULL;
+	struct cached_pkt *pkt = NULL;
+	list_for_each_entry(req, &arpcache.req_list, list) {
+        pkt = NULL;
+        list_for_each_entry(pkt, &req->cached_packets, list) {
+            printf("Packet is %s \n", pkt->packet);
+            printf("what the fuck");
+        }
+	}
 }
