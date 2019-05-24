@@ -37,7 +37,8 @@ void print_arp_cache_list() {
     list_for_each_entry(req, &arpcache.req_list, list) {
         pkt = NULL;
         list_for_each_entry(pkt, &req->cached_packets, list) {
-            printf("Packet is %s \n", pkt->packet);
+//            printf("Packet is %s \n", pkt->packet);
+            printf("what the fuck");
         }
     }
 }
