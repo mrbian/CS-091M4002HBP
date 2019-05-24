@@ -33,9 +33,9 @@ iface_info_t * iface_init() {
 void print_arp_cache_list() {
     struct arp_req *req = NULL;
     struct cached_pkt *pkt = NULL;
-    list_for_each_entry(req, arpcache.req_list, list) {
+    list_for_each_entry(req, &arpcache.req_list, list) {
         pkt = NULL;
-        list_for_each_entry(pkt, req->cached_packets, list) {
+        list_for_each_entry(pkt, &req->cached_packets, list) {
             printf("Packet is %s \n", pkt->packet);
         }
     }
