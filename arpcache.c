@@ -97,6 +97,7 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
             struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
 			strcpy(new_pkt->packet, packet);
             new_pkt->len = len;
+			init_list_head(&new_pkt->list);
             list_add_tail(&new_pkt->list, &ele->cached_packets);                                                           // 将包对象串上去
         }
     }
