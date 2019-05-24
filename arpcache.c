@@ -156,7 +156,8 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 					strcat(macstr, pkt->packet);
 				}
 				pkt->len = (int)strlen(pkt->packet);
-				iface_send_packet(req->iface, pkt->packet, pkt->len);
+				printf("Send %s \n", pkt->packet);
+//				iface_send_packet(req->iface, pkt->packet, pkt->len);
 			}
 		}
 	}
