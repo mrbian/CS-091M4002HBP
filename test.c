@@ -31,6 +31,7 @@ iface_info_t * iface_init() {
 
 // 遍历并打印所有的缓存包
 void print_arp_cache_list() {
+    printf("print all cached packet \n");
     struct arp_req *req = NULL;
     struct cached_pkt *pkt = NULL;
     list_for_each_entry(req, &arpcache.req_list, list) {
