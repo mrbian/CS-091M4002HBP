@@ -204,10 +204,10 @@ void *arpcache_sweep(void *arg)
         // 遍历待决包，如果等待时间超过1s，重发，如果重发次数超过5次，针对此包发送icmp包，并且删除掉此包
         struct arp_req *req = NULL;
         struct cached_pkt *pkt = NULL;
-        list_for_each_entry(req, arpcache.req_list, list) {
+        list_for_each_entry(req, &arpcache.req_list, list) {
             if(req->retries >= 5) {
                 pkt = NULL;
-                list_for_each_entry(pkt, req->cached_packets, list) {       // 对每个包依次回复icmp
+                list_for_each_entry(pkt, &req->cached_packets, list) {       // 对每个包依次回复icmp
                     icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
                 }
                 list_delete_entry(&req->list);          // 删除该项
