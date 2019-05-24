@@ -170,7 +170,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 
 				pkt->len = (int)strlen(pkt->packet);
 				printf("Send %s \n", pkt->packet);
-//				iface_send_packet(req->iface, pkt->packet, pkt->len);
+//				iface_send_packet(req->iface, req->ip4, pkt->packet, pkt->len);
 			}
 		}
 	}
@@ -185,12 +185,42 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 // request has been sent 5 times without receiving arp reply, for each
 // pending packet, send icmp packet (DEST_HOST_UNREACHABLE), and drop these
 // packets.
-void *arpcache_sweep(void *arg) 
+void *arpcache_sweep(void *arg)
 {
+    int i = 0;
+    int j = 0;
+    time_t now;
 	while (1) {
 		sleep(1);
 		fprintf(stderr, "TODO: sweep arpcache periodically: remove old entries, resend arp requests .\n");
+        // 遍历arp缓存，删除超过15s的旧条目
+        for(i = 0; i < MAX_ARP_SIZE; i += 1) {
+            time(&now);
+            if((long)now - (long)arpcache.entries[i].added > 15) {
+                arpcache.entries[i].valid = 0;                          // valid为0即相当于删除
+            }
+        }
 
+        // 遍历待决包，如果等待时间超过1s，重发，如果重发次数超过5次，针对此包发送icmp包，并且删除掉此包
+        struct arp_req *req = NULL;
+        struct cached_pkt *pkt = NULL;
+        list_for_each_entry(req, arpcache.req_list, list) {
+            if(req->retries >= 5) {
+                pkt = NULL;
+                list_for_each_entry(pkt, req->cached_packets, list) {       // 对每个包依次回复icmp
+                    icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
+                }
+                list_delete_entry(&req->list);          // 删除该项
+            } else {
+                time(&now);
+                if((long)now - (long)req->sent > 1) {  // 如果超时1s，重发arp请求，且重发次数+1，重发时间重置
+                    pkt = NULL;
+                    req->retries += 1;
+                    req->sent = now;
+                    arp_send_request(req->iface, req->ip4);     // 针对ip4重发arp请求
+                }
+            }
+        }
 	}
 
 	return NULL;

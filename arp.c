@@ -16,8 +16,23 @@
 void arp_send_request(iface_info_t *iface, u32 dst_ip)
 {
 	fprintf(stderr, "TODO: send arp request when lookup failed in arpcache.\n");
-    // 先查询arpcache
-//    arpcache_lookup();
+    // 包装好一个arp请求包，并且把它发出去
+	struct ether_arp *arp_req_pkt = (struct ether_arp *)malloc(sizeof(struct ether_arp));
+//	arp_pkt->arp_hrd = iface->mac;
+	arp_req_pkt->arp_op = 0x01;
+	int i;
+	for(i = 0; i < ETH_ALEN; i += 1) {
+		arp_req_pkt->arp_tha[i] = 0xFF;   // 各项全为FF
+	}
+	for(i = 0; i < ETH_ALEN; i += 1) {
+		arp_req_pkt->arp_sha[i] = iface->mac[i];
+	}
+	arp_req_pkt->arp_spa = iface->ip;
+	arp_req_pkt->arp_tpa = dst_ip;
+	arp_req_pkt->arp_hln = ETH_ALEN;
+	arp_req_pkt->arp_pln = sizeof(dst_ip);   // todo: 这里是protocol address length？
+	char *packet = (char *)arp_req_pkt;
+	printf("%s", packet);
 }
 
 // send an arp reply packet: encapsulate an arp reply packet, send it out
