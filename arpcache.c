@@ -91,14 +91,13 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
     // 遍历ARP缓存链表中的第一层链表
     struct arp_req *ele = NULL;
     list_for_each_entry(ele, &arpcache.req_list, list) {            // 注意这里是&arpcache.req_list而不是arpcache.req_list，因为宏定义里面用的是->操作符，所以必须传入结构体指针，而不是结构体变量
-        if (ele->ip4 == ip4) {  // 若找到且有效
+        if (ele->ip4 == ip4) {  // 若找到
+			printf("%d founded! \n", ip4);
             flag = 1;
             struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
-            new_pkt->packet = packet;
+			strcpy(new_pkt->packet, packet);
             new_pkt->len = len;
-            struct list_head * new = (struct list_head *)malloc(sizeof(struct list_head));                     // 新建指针
-            new_pkt->list = *new;
-            list_add_tail(new, &ele->cached_packets);                                                           // 将包对象串上去
+            list_add_tail(&new_pkt->list, &ele->cached_packets);                                                           // 将包对象串上去
         }
     }
 
@@ -112,7 +111,7 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
         // 再新建包对象并加入缓存对象的链表
         init_list_head(&new_req->cached_packets);                                       // 初始化包节点
         struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
-        new_pkt->packet = packet;
+		strcpy(new_pkt->packet, packet);
         new_pkt->len = len;
         init_list_head(&new_pkt->list);
         list_add_tail(&new_pkt->list, &new_req->cached_packets);                                   // 将包对象串上去
