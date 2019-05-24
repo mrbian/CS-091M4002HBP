@@ -35,6 +35,8 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 	memcpy(packet, arp_req_pkt, sizeof(struct ether_arp));
 	printf("len of packet is %d \n", (int)strlen(packet)); // 结束符'\0'对应的16进制是什么？
 	printf("size of packet is %d \n", (int) sizeof(packet));
+	char *test;
+	printf("size of test is %d \n", (int) sizeof(test));
 	printf("size of struct is %d \n", (int) sizeof(struct ether_arp));
 }
 

@@ -10,6 +10,7 @@
 #define ARPOP_REQUEST 1
 #define ARPOP_REPLY 2
 
+// 28B
 struct ether_arp {
     u16 arp_hrd;		/* Format of hardware address.  */
     u16 arp_pro;		/* Format of protocol address.  */
