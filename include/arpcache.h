@@ -40,7 +40,6 @@ typedef struct {  // ARP表
 	pthread_t thread; // ARP表维护线程
 } arpcache_t;
 
-static arpcache_t arpcache; // todo: here has been added
 void arpcache_init();
 void arpcache_destroy();
 void *arpcache_sweep(void *);

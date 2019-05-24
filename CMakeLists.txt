@@ -3,7 +3,6 @@ project(2_router)
 
 set(CMAKE_CXX_STANDARD 11)
 
-include_directories(/Users/macbook/Desktop/静态路由转发实验/2-router)
 include_directories(/Users/macbook/Desktop/静态路由转发实验/2-router/include)
 
 add_executable(2_router

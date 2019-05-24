@@ -11,7 +11,8 @@
 #include <unistd.h>
 #include <signal.h>
 #include <arpcache.h>
-#include <include/arpcache.h>
+
+extern static arpcache_t arpcache;  // todo: 调用其他.c文件里面的static变量要用extern
 
 // 生成一个路由端口
 iface_info_t * iface_init() {
@@ -35,7 +36,6 @@ void print_arp_cache_list() {
     printf("print all cached packet \n");
     struct arp_req *req = NULL;
     struct cached_pkt *pkt = NULL;
-    printf("%d", (int)sizeof(arpcache));
     list_for_each_entry(req, &arpcache.req_list, list) {
         printf("???\n");
 //        pkt = NULL;

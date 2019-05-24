@@ -6,5 +6,5 @@ C_FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
 
 C_DEFINES = 
 
-C_INCLUDES = -I/Users/macbook/Desktop/静态路由转发实验/2-router -I/Users/macbook/Desktop/静态路由转发实验/2-router/include 
+C_INCLUDES = -I/Users/macbook/Desktop/静态路由转发实验/2-router/include 
 

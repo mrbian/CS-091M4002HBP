@@ -44,7 +44,6 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/macbook/Desktop/静态路由转发实验/2-router"/>
 					<Add directory="/Users/macbook/Desktop/静态路由转发实验/2-router/include"/>
 					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
@@ -67,7 +66,6 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/macbook/Desktop/静态路由转发实验/2-router"/>
 					<Add directory="/Users/macbook/Desktop/静态路由转发实验/2-router/include"/>
 					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
