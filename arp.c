@@ -47,13 +47,13 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 	B->a = 1;
 	B->b = 2;
 
-	char *str1 = (char *)malloc(sizeof(struct Test));
-//	memcpy(str1, &A, sizeof(struct Test));  // 写成A直接报错
-//	printf("Size of str1 from A is %d \n", (int)strlen(str1));
-//	printf("Data of str1 from A is %s \n", str1);
-	memcpy(str1, B, sizeof(struct Test));
-	printf("Size of str1 from B is %d \n", (int)strlen(str1));
-	printf("Data of str1 from B is %s \n", str1);
+	char *str1 = (char *)malloc(100);
+	memcpy(str1, &A, sizeof(struct Test));  // 写成A直接报错
+	printf("Size of str1 from A is %d \n", (int)strlen(str1));
+	printf("Data of str1 from A is %s \n", str1);
+//	memcpy(str1, B, sizeof(struct Test));
+//	printf("Size of str1 from B is %d \n", (int)strlen(str1));
+//	printf("Data of str1 from B is %s \n", str1);
 }
 
 // send an arp reply packet: encapsulate an arp reply packet, send it out
