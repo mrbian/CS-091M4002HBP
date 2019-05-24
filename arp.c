@@ -11,11 +11,6 @@
 
 // #include "log.h"
 
-struct Test {
-	int a;
-	int b;
-};
-
 // send an arp request: encapsulate an arp request packet, send it out through
 // iface_send_packet
 void arp_send_request(iface_info_t *iface, u32 dst_ip)
@@ -37,23 +32,8 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 	arp_req_pkt->arp_tpa = dst_ip;
 	arp_req_pkt->arp_hln = ETH_ALEN;
 	arp_req_pkt->arp_pln = sizeof(dst_ip);   // todo: 这里是protocol address length？
-	memcpy(packet, &arp_req_pkt, sizeof(struct ether_arp));
-	printf("%d\n", (int)sizeof(struct ether_arp));
+	memcpy(packet, arp_req_pkt, sizeof(struct ether_arp));
 	printf("size of packet is %d \n", (int)strlen(packet));
-
-
-	struct Test A = { 1, 2 };
-	char *str1 = (char *)malloc(sizeof(struct Test));
-	memcpy(str1, &A, sizeof(struct Test));  // 写成A编译时就报错
-	printf("Size of str1 from A is %d \n", (int)strlen(str1));
-	printf("Data of str1 from A is %s \n", str1);
-
-	struct Test *B = (struct Test *)malloc(sizeof(struct Test));
-	B->a = 1;
-	B->b = 2;
-	memcpy(str1, &B, sizeof(struct Test));
-	printf("Size of str1 from B is %d \n", (int)strlen(str1));
-	printf("Data of str1 from B is %s \n", str1);
 }
 
 // send an arp reply packet: encapsulate an arp reply packet, send it out
