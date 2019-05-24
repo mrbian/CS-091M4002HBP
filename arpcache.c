@@ -149,6 +149,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 	struct arp_req *req = NULL;
 	struct cached_pkt *pkt = NULL;
 	char *macstr = (char *)malloc(sizeof(char) * 30);
+	char *tmpstr = (char *)malloc(sizeof(char) * 10);
 	list_for_each_entry(req, &arpcache.req_list, list) {
 		if(req->ip4 == ip4) {
 			req->retries += 1;   // 记录发送次数和时间
@@ -158,9 +159,9 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
 
 				// todo: 这样填充header是否正确？
-				for(i = 0; i < ETH_ALEN; i += 1) {
-					sprintf(macstr, "%d", mac[i]);
-					strcat(macstr, pkt->packet);
+				for(i = ETH_ALEN; i >= 0; i += 1) {
+					sprintf(tmpstr, "%d", mac[i]);
+					strcat(macstr, tmpstr);
 				}
 				strcpy(pkt->packet, macstr);
 
