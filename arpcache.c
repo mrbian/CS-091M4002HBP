@@ -107,12 +107,17 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
     if(flag == 0) {
         // 先新建缓存对象
         struct arp_req *new_req = (struct arp_req *)malloc(sizeof(struct arp_req));     // 新建缓存对象
-        init_list_head(&new_req->list);
-        list_add_tail(&new_req->list, &arpcache.req_list);                                         // 将缓存对象串上去
+		// 给缓存对象初始化值
+		new_req->ip4 = ip4;
+		new_req->retries = 0;
+		new_req->iface = iface;
+		init_list_head(&new_req->cached_packets);                                       // 初始化包节点
+        init_list_head(&new_req->list);													// 将缓存对象串上去
+        list_add_tail(&new_req->list, &arpcache.req_list);
 
         // 再新建包对象并加入缓存对象的链表
-        init_list_head(&new_req->cached_packets);                                       // 初始化包节点
         struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
+		// 给包对象初始化值
 		new_pkt->packet = packet;
         new_pkt->len = len;
         init_list_head(&new_pkt->list);
@@ -125,7 +130,7 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 // insert the IP->mac mapping into arpcache, if there are pending packets
 // waiting for this mapping, fill the ethernet header for each of them, and send
 // them out
-void arpcache_insert(iface_info_t *iface, u32 ip4, u8 mac[ETH_ALEN])
+void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 {
 	fprintf(stderr, "TODO: insert ip->mac entry, and send all the pending packets.\n");
     // 先向ARP表中插入一个IP到MAC地址映射条目，放到第一个位置
@@ -153,7 +158,7 @@ void arpcache_insert(iface_info_t *iface, u32 ip4, u8 mac[ETH_ALEN])
 					strcat(macstr, pkt->packet);
 				}
 				pkt->len = (int)strlen(pkt->packet);
-				iface_send_packet(iface, pkt->packet, pkt->len);
+				iface_send_packet(req->iface, pkt->packet, pkt->len);
 			}
 		}
 	}
