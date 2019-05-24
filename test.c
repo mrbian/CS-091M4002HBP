@@ -37,6 +37,7 @@ void arpcache_test(){
 
     // init packet1
     u32 ip4 = 0xA001;  // 10.0.0.1
+    printf("%d", ip4);
     char *ip_str = "10.0.0.1";
     u8 mac[ETH_ALEN] = {1, 2, 3, 4, 5, 6};  // 01-01-01-01-01-01
     char *packet = "test1";
