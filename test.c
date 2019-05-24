@@ -58,11 +58,5 @@ void arpcache_test(){
         printf("未找到IP为%s的MAC地址映射，应将此包加入待决包列表\n", ip_str);
         arpcache_append_packet(iface, ip4, packet, (int)strlen(packet));
     }
-    result = arpcache_lookup(ip4, mac);
-    if(result == 0) {
-        printf("ERROR: arpcache_append_packet not work\n");
-        return;
-    }
     print_arp_cache_list();
-    printf("FOUND\n");
 }
