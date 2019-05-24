@@ -48,7 +48,7 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 	B->b = 2;
 
 	char *str1 = (char *)malloc(sizeof(struct Test));
-	memcpy(str1, A, sizeof(struct Test));
+	memcpy(str1, &A, sizeof(struct Test));
 	printf("Size of str1 from A is %d \n", (int)strlen(str1));
 	printf("Data of str1 from A is %s \n", str1);
 	memcpy(str1, B, sizeof(struct Test));
