@@ -11,7 +11,9 @@
 #include <unistd.h>
 #include <signal.h>
 #include <arpcache.h>
+#include <include/arpcache.h>
 
+// 生成一个路由端口
 iface_info_t * iface_init() {
     struct iface_info_t *iface = (struct iface_info_t *)malloc(sizeof(struct iface_info_t));
     u32 ip4 = 0xA001;  // 10.0.0.1
@@ -28,6 +30,19 @@ iface_info_t * iface_init() {
     return iface;
 }
 
+// 遍历并打印所有的缓存包
+void print_arp_cache_list() {
+    struct arp_req *req = NULL;
+    struct cached_pkt *pkt = NULL;
+    list_for_each_entry(req, arpcache.req_list, list) {
+        pkt = NULL;
+        list_for_each_entry(pkt, req->cached_packets, list) {
+            printf("Packet is %s \n", pkt->packet);
+        }
+    }
+}
+
+// arpcache_test
 void arpcache_test(){
     // init system
     struct iface_info_t *iface = iface_init();
@@ -35,11 +50,20 @@ void arpcache_test(){
 
     // init packet
     u32 ip4 = 0xA001;  // 10.0.0.1
+    char *ip_str = "10.0.0.1";
     u8 mac[ETH_ALEN] = {1, 2, 3, 4, 5, 6};  // 01-01-01-01-01-01
     char *packet = "test packet";
 
     int result = arpcache_lookup(ip4, mac);  // should be not found
     if(result == 0) {
-        printf("未找到，应将此包加入待决包列表");
+        printf("未找到IP为%s的MAC地址映射，应将此包加入待决包列表\n", ip_str);
+        arpcache_append_packet(iface, ip4, packet, (int)strlen(packet));
     }
+    result = arpcache_lookup(ip4, mac);
+    if(result == 0) {
+        printf("ERROR: arpcache_append_packet not work");
+        return;
+    }
+    print_arp_cache_list();
+    printf("FOUND");
 }

@@ -15,6 +15,7 @@ typedef struct {
 
 extern ustack_t *instance;  // 全局实例
 
+// todo: 这里将typedef struct -> typedef struct iface_info_t
 typedef struct iface_info_t{   // 网络端口信息
 	struct list_head list;
 

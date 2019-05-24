@@ -78,6 +78,7 @@ int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
 // request has been sent out), just append this packet at the tail of that entry
 // (the entry may contain more than one packet); otherwise, malloc a new entry
 // with the given IP address and iface, append the packet, and send arp request.
+// len是packet这个内容的长度
 void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 {
 	fprintf(stderr, "TODO: append the ip address if lookup failed, and send arp request if necessary.\n");
