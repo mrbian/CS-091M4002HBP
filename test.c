@@ -12,6 +12,8 @@
 #include <signal.h>
 #include <arpcache.h>
 
+static arpcache_t arpcache;  // arpcache变量
+
 // 生成一个路由端口
 iface_info_t * iface_init() {
     struct iface_info_t *iface = (struct iface_info_t *)malloc(sizeof(struct iface_info_t));
