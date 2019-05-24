@@ -107,8 +107,8 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
         // 先新建缓存对象
         struct arp_req *new_req = (struct arp_req *)malloc(sizeof(struct arp_req));     // 新建缓存对象
         struct list_head *new = (struct list_head *)malloc(sizeof(struct list_head));   // 新建指针
-        new_req->list = *new;
-        list_add_tail(new, &arpcache.req_list);                                         // 将缓存对象串上去
+//        new_req->list = *new;
+//        list_add_tail(new, &arpcache.req_list);                                         // 将缓存对象串上去
 
         // 再新建包对象并加入缓存对象的链表
 //        init_list_head(&new_req->cached_packets);                                       // 初始化包节点
