@@ -163,8 +163,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 					sprintf(tmpstr, "%d", mac[i]);
 					strcat(macstr, tmpstr);
 				}
-				strcpy(macstr, pkt->packet);
-				printf("%s\n", macstr);
+				strcat(macstr, pkt->packet);
 				memcpy(pkt->packet, macstr, sizeof(char) * strlen(macstr));
 
 				pkt->len = (int)strlen(pkt->packet);
