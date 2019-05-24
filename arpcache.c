@@ -151,6 +151,9 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 	char *macstr;
 	list_for_each_entry(req, &arpcache.req_list, list) {
 		if(req->ip4 == ip4) {
+			req->retries += 1;   // 记录发送次数和时间
+			time(&req->sent);
+
 			pkt = NULL;
 			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
 				for(i = 0; i < ETH_ALEN; i += 1) { 					 // todo: 这样填充header是否正确？
