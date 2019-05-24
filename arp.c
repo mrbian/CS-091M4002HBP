@@ -33,10 +33,10 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 	arp_req_pkt->arp_hln = ETH_ALEN;
 	arp_req_pkt->arp_pln = sizeof(dst_ip);   // todo: 这里是protocol address length？
 	memcpy(packet, arp_req_pkt, sizeof(struct ether_arp));
-	printf("len of packet is %d \n", (int)strlen(packet)); // 结束符'\0'对应的16进制是什么？
-	printf("size of packet is %d \n", (int) sizeof(packet));
-	printf("size of test is %d \n", (int) sizeof(char *));
-	printf("size of struct is %d \n", (int) sizeof(struct ether_arp));
+//	printf("size of packet is %d \n", (int) sizeof(packet));   // todo: 64位系统指针是8B  // 结束符'\0'对应的16进制是什么？
+	struct ether_arp *new = (struct ether_arp*)malloc(sizeof(struct ether_arp));
+	memcpy(new, packet, sizeof(struct ether_arp));
+	printf("%d \n", new->arp_spa);
 }
 
 // send an arp reply packet: encapsulate an arp reply packet, send it out

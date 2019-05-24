@@ -14,7 +14,7 @@
 struct cached_pkt {  // 缓存的包结构
 	struct list_head list;
 	char *packet;
-	int len;
+	int len;			// todo: !important: 这里带上length是因为packet实际上就是一个首地址的作用，通过这个首地址+数据长度获取到相应的结构体数据
 };
 
 struct arp_req {  // 等待ARP回复的包缓存，二维链表结构
