@@ -62,6 +62,7 @@ int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
     int j = 0;
     int flag = 0;  // 默认未找到: 0
     for (i = 0; i < MAX_ARP_SIZE; i += 1) {
+        printf("%d \n", arpcache.entries[i].ip4);
         if(arpcache.entries[i].ip4 == ip4) {
             flag = 1;                           // flag置为找到: 1
             memcpy(arpcache.entries[i].mac, mac, sizeof(u8) * ETH_ALEN);  // MAC地址赋值

@@ -60,9 +60,9 @@ void arpcache_test(){
     }
     result = arpcache_lookup(ip4, mac);
     if(result == 0) {
-        printf("ERROR: arpcache_append_packet not work");
+        printf("ERROR: arpcache_append_packet not work\n");
         return;
     }
     print_arp_cache_list();
-    printf("FOUND");
+    printf("FOUND\n");
 }
