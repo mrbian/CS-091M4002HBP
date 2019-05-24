@@ -149,7 +149,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 	struct arp_req *req = NULL;
 	struct cached_pkt *pkt = NULL;
 	char *tmpstr = (char *)malloc(sizeof(char) * 10);   // 10
-	char *macstr = (char *)malloc(sizeof(char) * 60);  // 10 * 6
+	char *macstr = (char *)malloc(sizeof(char) * (10 * ETH_ALEN));  // 10 * 6
 	list_for_each_entry(req, &arpcache.req_list, list) {
 		if(req->ip4 == ip4) {
 			req->retries += 1;   // 记录发送次数和时间
@@ -163,9 +163,8 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 					sprintf(tmpstr, "%d", mac[i]);
 					strcat(macstr, tmpstr);
 				}
-				printf("%s", macstr);
-//				pkt->packet = (char *) malloc(sizeof(char) * (strlen(macstr) + strlen()));
-//				strcpy(pkt->packet, macstr);
+				strcpy(macstr, pkt->packet);
+				memcpy(pkt->packet, macstr, sizeof(char) * strlen(macstr));
 
 				pkt->len = (int)strlen(pkt->packet);
 				printf("Send %s \n", pkt->packet);
