@@ -276,8 +276,11 @@ int main(int argc, const char **argv)
 //	init_ustack();
 //	iface_info_t *iface = NULL;
 //
+//
 //	ustack_run();
 
-    arpcache_test();
+	arp_test();
+//    arpcache_test();
+
 	return 0;
 }

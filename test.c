@@ -4,6 +4,7 @@
 
 #include "base.h"
 #include "arpcache.h"
+#include "arp.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,11 +33,11 @@ iface_info_t * iface_init() {
 // arpcache_test
 void arpcache_test(){
     // init system
-    struct iface_info_t *iface = iface_init();
+    iface_info_t *iface = iface_init();
     arpcache_init();
 
     // init packet1
-    u32 ip4 = 0xA001;  // 10.0.0.1
+    u32 ip4 = 0xA0000001;  // 10.0.0.1
     char *ip_str = "10.0.0.1";
     u8 mac[ETH_ALEN] = {1, 2, 3, 4, 5, 6};  // 01-01-01-01-01-01
     char *packet = "test1";
@@ -59,4 +60,10 @@ void arpcache_test(){
     // 新建一个cache，测试arpcache_insert函数
     arpcache_insert(ip4, mac);
     print_arp_cache_list();
+}
+
+void arp_test() {
+    iface_info_t *iface = iface_init();
+    u32 dst_ip = 0xA0000001;
+    arp_send_request(iface, dst_ip);
 }
