@@ -11,8 +11,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <arpcache.h>
-
-static arpcache_t arpcache;  // arpcache变量
+#include <include/arpcache.h>
 
 // 生成一个路由端口
 iface_info_t * iface_init() {
@@ -36,6 +35,7 @@ void print_arp_cache_list() {
     printf("print all cached packet \n");
     struct arp_req *req = NULL;
     struct cached_pkt *pkt = NULL;
+    printf("%d", (int)sizeof(arpcache));
     list_for_each_entry(req, &arpcache.req_list, list) {
         printf("???\n");
 //        pkt = NULL;
