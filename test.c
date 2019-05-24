@@ -15,7 +15,10 @@
 
 // 生成一个路由端口
 iface_info_t * iface_init() {
-    struct iface_info_t *iface = (struct iface_info_t *)malloc(sizeof(struct iface_info_t));
+    iface_info_t *iface = (iface_info_t *)malloc(sizeof(iface_info_t));
+    bzero(iface, sizeof(iface_info_t));
+    init_list_head(&iface->list);
+
     u32 ip4 = 0xA001;  // 10.0.0.1
     u32 mask = 0xF000;  // 255.0.0.0
     u8 mac[ETH_ALEN] = {1, 2, 3, 4, 5, 6};  // 01-01-01-01-01-01
