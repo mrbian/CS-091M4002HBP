@@ -90,34 +90,34 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
     int flag = 0; // 默认未找到
     // 遍历ARP缓存链表中的第一层链表
     struct arp_req *ele = NULL;
-//    list_for_each_entry(ele, &arpcache.req_list, list) {            // 注意这里是&arpcache.req_list而不是arpcache.req_list，因为宏定义里面用的是->操作符，所以必须传入结构体指针，而不是结构体变量
-//        if (ele->ip4 == ip4) {  // 若找到
-//            flag = 1;
-//            struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
-//            new_pkt->packet = packet;
-//            new_pkt->len = len;
-//            struct list_head * new = (struct list_head *)malloc(sizeof(struct list_head));                     // 新建指针
-//            new_pkt->list = *new;
-//            list_add_tail(new, &ele->cached_packets);                                                           // 将包对象串上去
-//        }
-//    }
+    list_for_each_entry(ele, &arpcache.req_list, list) {            // 注意这里是&arpcache.req_list而不是arpcache.req_list，因为宏定义里面用的是->操作符，所以必须传入结构体指针，而不是结构体变量
+        if (ele->ip4 == ip4) {  // 若找到
+            flag = 1;
+            struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
+            new_pkt->packet = packet;
+            new_pkt->len = len;
+            struct list_head * new = (struct list_head *)malloc(sizeof(struct list_head));                     // 新建指针
+            new_pkt->list = *new;
+            list_add_tail(new, &ele->cached_packets);                                                           // 将包对象串上去
+        }
+    }
 
     // 若未找到
     if(flag == 0) {
         // 先新建缓存对象
-//        struct arp_req *new_req = (struct arp_req *)malloc(sizeof(struct arp_req));     // 新建缓存对象
-//        struct list_head *new = (struct list_head *)malloc(sizeof(struct list_head));   // 新建指针
-//        new_req->list = *new;
-//        list_add_tail(new, &arpcache.req_list);                                         // 将缓存对象串上去
+        struct arp_req *new_req = (struct arp_req *)malloc(sizeof(struct arp_req));     // 新建缓存对象
+        struct list_head *new = (struct list_head *)malloc(sizeof(struct list_head));   // 新建指针
+        new_req->list = *new;
+        list_add_tail(new, &arpcache.req_list);                                         // 将缓存对象串上去
 
         // 再新建包对象并加入缓存对象的链表
-//        init_list_head(&new_req->cached_packets);                                       // 初始化包节点
-//        struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
-//        new_pkt->packet = packet;
-//        new_pkt->len = len;
-//        new = (struct list_head *)malloc(sizeof(struct list_head));                     // 新建指针
-//        new_pkt->list = *new;
-//        list_add_tail(new, &new_req->cached_packets);                                   // 将包对象串上去
+        init_list_head(&new_req->cached_packets);                                       // 初始化包节点
+        struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
+        new_pkt->packet = packet;
+        new_pkt->len = len;
+        new = (struct list_head *)malloc(sizeof(struct list_head));                     // 新建指针
+        new_pkt->list = *new;
+        list_add_tail(new, &new_req->cached_packets);                                   // 将包对象串上去
 
         // todo: send arp request
 
