@@ -43,9 +43,9 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 
 
 	struct Test A = { 1, 2 };
-	struct Test *B = (struct Test *)sizeof(struct Test);
-	B->a = 1;
-	B->b = 2;
+//	struct Test *B = (struct Test *)sizeof(struct Test);
+//	B->a = 1;
+//	B->b = 2;
 
 	char *str1 = (char *)malloc(100);
 	memcpy(str1, &A, sizeof(struct Test));  // 写成A直接报错
