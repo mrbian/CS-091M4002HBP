@@ -57,14 +57,13 @@ int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
 {
 	fprintf(stderr, "TODO: lookup ip address in arp cache.\n");
     // 遍历ARP表，尝试找到ip4对应的mac地址
-    // 若找到，将mac数组各变量替换后返回1；
+    // 若找到且结果有效，将mac数组各变量替换后返回1；
     // 若未找到，返回0；
     int i = 0;
     int j = 0;
     int flag = 0;  // 默认未找到: 0
     for (i = 0; i < MAX_ARP_SIZE; i += 1) {
-//        printf("%d \n", arpcache.entries[i].ip4);
-        if(arpcache.entries[i].ip4 == ip4) {
+        if(arpcache.entries[i].ip4 == ip4 && arpcache.entries[i].valid == 1) {  // 如果找到且有效
             flag = 1;                           // flag置为找到: 1
             memcpy(arpcache.entries[i].mac, mac, sizeof(u8) * ETH_ALEN);  // MAC地址赋值
         }
@@ -92,7 +91,7 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
     // 遍历ARP缓存链表中的第一层链表
     struct arp_req *ele = NULL;
     list_for_each_entry(ele, &arpcache.req_list, list) {            // 注意这里是&arpcache.req_list而不是arpcache.req_list，因为宏定义里面用的是->操作符，所以必须传入结构体指针，而不是结构体变量
-        if (ele->ip4 == ip4) {  // 若找到
+        if (ele->ip4 == ip4) {  // 若找到且有效
             flag = 1;
             struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
             new_pkt->packet = packet;
@@ -118,20 +117,45 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
         init_list_head(&new_pkt->list);
         list_add_tail(&new_pkt->list, &new_req->cached_packets);                                   // 将包对象串上去
 
-        // todo: send arp request
-
+		arp_send_request(iface, ip4);
     }
 }
 
 // insert the IP->mac mapping into arpcache, if there are pending packets
 // waiting for this mapping, fill the ethernet header for each of them, and send
 // them out
-void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
+void arpcache_insert(iface_info_t *iface, u32 ip4, u8 mac[ETH_ALEN])
 {
 	fprintf(stderr, "TODO: insert ip->mac entry, and send all the pending packets.\n");
-    // 向ARP表中插入一个IP到MAC地址映射条目
-    // 遍历缓存列表，如果有对应IP地址的待决包，则发送出去
+    // 先向ARP表中插入一个IP到MAC地址映射条目，放到第一个位置
+	struct arp_cache_entry *entry = (struct arp_cache_entry *)malloc(sizeof(struct arp_cache_entry));
+	entry->ip4 = ip4;
+	memcpy(entry->mac, mac, sizeof(u8) * ETH_ALEN);
+	time(&entry->added);
+	entry->valid = 1;
+	int i;
+	for (i = MAX_ARP_SIZE - 1; i >= 0; i -= 1) {  // 依次向后移动一位，将最新的内容放到前面，这样自动先入先出
+		arpcache.entries[i] = arpcache.entries[i - 1];
+	}
+	arpcache.entries[0] = *entry;
 
+	// 然后遍历缓存列表，如果有对应IP地址的待决包，将MAC地址填充好发送出去
+	struct arp_req *req = NULL;
+	struct cached_pkt *pkt = NULL;
+	char *macstr;
+	list_for_each_entry(req, &arpcache.req_list, list) {
+		if(req->ip4 == ip4) {
+			pkt = NULL;
+			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
+				for(i = 0; i < ETH_ALEN; i += 1) { 					 // todo: 这样填充header是否正确？
+					sprintf(macstr, "%d", mac[i]);
+					strcat(macstr, pkt->packet);
+				}
+				pkt->len = (int)strlen(pkt->packet);
+				iface_send_packet(iface, pkt->packet, pkt->len);
+			}
+		}
+	}
 }
 
 // sweep arpcache periodically
@@ -148,6 +172,7 @@ void *arpcache_sweep(void *arg)
 	while (1) {
 		sleep(1);
 		fprintf(stderr, "TODO: sweep arpcache periodically: remove old entries, resend arp requests .\n");
+
 	}
 
 	return NULL;
@@ -163,7 +188,6 @@ void print_arp_cache_list() {
         pkt = NULL;
         list_for_each_entry(pkt, &req->cached_packets, list) {
             printf("Packet is %s \n", pkt->packet);
-            printf("what the fuck");
         }
 	}
 }

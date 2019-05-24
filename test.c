@@ -39,12 +39,14 @@ void arpcache_test(){
     u32 ip4 = 0xA001;  // 10.0.0.1
     char *ip_str = "10.0.0.1";
     u8 mac[ETH_ALEN] = {1, 2, 3, 4, 5, 6};  // 01-01-01-01-01-01
-    char *packet = "test packet";
+    char *packet = "test1";
 
     int result = arpcache_lookup(ip4, mac);  // should be not found
     if(result == 0) {
         printf("未找到IP为%s的MAC地址映射，应将此包加入待决包列表\n", ip_str);
-        arpcache_append_packet(iface, ip4, packet, (int)strlen(packet));
+        arpcache_append_packet(iface, ip4, packet, (int)strlen(packet));  // 再加两个包
     }
+    arpcache_append_packet(iface, ip4, packet, (int)strlen(packet));
+    arpcache_append_packet(iface, ip4, packet, (int)strlen(packet));
     print_arp_cache_list();
 }

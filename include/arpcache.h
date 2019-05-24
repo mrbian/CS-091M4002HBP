@@ -21,8 +21,8 @@ struct arp_req {  // 等待ARP回复的包缓存，二维链表结构
 	struct list_head list;  // 指向前一个和后一个arp_req的指针结构体
 	iface_info_t *iface;
 	u32 ip4;
-	time_t sent;
-	int retries;
+	time_t sent;					  // 发送时间
+	int retries;					  // 重试次数
 	struct list_head cached_packets;  // 自身维护的链表
 };
 
@@ -30,7 +30,7 @@ struct arp_cache_entry {  // ARP表中的一个条目
 	u32 ip4; 	// stored in host byte order IP地址，本地字节序
 	u8 mac[ETH_ALEN];
 	time_t added;
-	int valid;
+	int valid; 		// 是否继续有效，如果无效置为0，维护线程会自动清理掉
 };
 
 typedef struct {  // ARP表
