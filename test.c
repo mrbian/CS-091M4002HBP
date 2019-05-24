@@ -54,6 +54,8 @@ void arpcache_test(){
     ip4 = 0xA001;  // 10.0.0.1
     packet = "test3";
     arpcache_append_packet(iface, ip4, packet, (int)strlen(packet));
+    print_arp_cache_list();
 
+    arpcache_insert(ip4, mac);
     print_arp_cache_list();
 }
