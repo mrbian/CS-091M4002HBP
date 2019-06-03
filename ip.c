@@ -40,6 +40,7 @@ rt_entry_t *longest_prefix_match(u32 dst)
 		printf("mask: %x \n", ele->mask);
 		printf("dest: %x \n", ele->dest);
 		printf("result: %x \n", (ele->dest & ele->mask));
+		printf("dst: %x \n", dst);
 		if((ele->dest & ele->mask) == (dst & ele->mask)) {				// 如果按位与有相同的
 			printf("found \n");
 			if(ele->mask >= max_mask) {							// 如果本子网掩码是最大的

@@ -20,7 +20,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 	fprintf(stderr, "TODO: malloc and send icmp packet.\n");
 	// 获取到ip目的地址
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(in_pkt);
-	u32 dst_ip = pkt_ip_hdr->daddr;
+	u32 dst_ip = ntohl(pkt_ip_hdr->daddr);
 
 	rt_entry_t * rt = longest_prefix_match(dst_ip);
 	if(rt) {
