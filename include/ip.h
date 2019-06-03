@@ -18,13 +18,13 @@
 #define IP_DF	0x4000		// Do not Fragment
 struct iphdr {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-    unsigned int ihl:4;			// IP包头长度，注意IP包头可变长，最少20字节
+    unsigned int ihl:4;			// IP包头长度，这里单位为4字节！
     unsigned int version:4;
 #elif __BYTE_ORDER == __BIG_ENDIAN
     unsigned int version:4;
     unsigned int ihl:4;
 #endif
-    u8 tos;			// 服务字段（最小时延、吞吐量等）
+    u8 tos;			// 服务字段（最小时延、吞吐量等），未被使用过
     u16 tot_len;	// 包总长度（包括头部和数据部分）
     u16 id;			// 标识分数据报（第几个包） if Fragment
     u16 frag_off;	// 分包用

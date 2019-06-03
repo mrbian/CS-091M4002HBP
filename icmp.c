@@ -34,10 +34,10 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 		ip_init_hdr(packet_iphdr, rt->iface->ip, dst_ip, sizeof(struct iphdr) + sizeof(struct icmphdr), 1);   // protocal IPPROTO_ICMP : 1
 
 		// icmp header
-		struct icmphdr * packet_icmphdr = (struct icmphdr *)(packet + ETHER_HDR_SIZE + packet_iphdr->ihl);
+		struct icmphdr * packet_icmphdr = (struct icmphdr *)(packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4);
 		packet_icmphdr->code = code;
 		packet_icmphdr->type = type;
-		packet_icmphdr->checksum = htons(icmp_checksum(packet_icmphdr, sizeof(struct icmphdr)));		// 要在最后面设置checksum
+		packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
 
 		// send
 		iface_send_packet_by_arp(rt->iface, dst_ip, packet, (int)packet_length);

@@ -15,7 +15,7 @@
 void ip_init_hdr(struct iphdr *ip, u32 saddr, u32 daddr, u16 len, u8 proto)
 {
 	ip->version = 4;
-	ip->ihl = 5;
+	ip->ihl = 5;				// 总长度20字节
 	ip->tos = 0;
 	ip->tot_len = htons(len);
 	ip->id = rand();
@@ -24,7 +24,7 @@ void ip_init_hdr(struct iphdr *ip, u32 saddr, u32 daddr, u16 len, u8 proto)
 	ip->protocol = proto;
 	ip->saddr = htonl(saddr);
 	ip->daddr = htonl(daddr);
-	ip->checksum = ip_checksum(ip);
+	ip->checksum = ip_checksum(ip);			// 这里校验和没有进行大小字节转换
 }
 
 // lookup in the routing table, to find the entry with the same and longest prefix.
@@ -37,14 +37,8 @@ rt_entry_t *longest_prefix_match(u32 dst)
 
 	rt_entry_t * ele = NULL;
 	list_for_each_entry(ele, &rtable, list) {
-//		printf("mask: %x \n", ele->mask);
-//		printf("dest: %x \n", ele->dest);
-//		printf("result: %x \n", (ele->dest & ele->mask));
-//		printf("dst: %x \n", dst);
 		if((ele->dest & ele->mask) == (dst & ele->mask)) {				// 如果按位与有相同的
-			printf("found \n");
 			if(ele->mask >= max_mask) {							// 如果本子网掩码是最大的
-				printf("set \n");
 				max_mask = ele->mask;
 				result = ele;
 			}
