@@ -78,11 +78,11 @@ void arp_send_reply(iface_info_t *iface, struct ether_arp *req_hdr)
     ea->arp_tpa = htonl(req_hdr->arp_spa);
     memcpy(ea->arp_tha, req_hdr->arp_tha, ETH_ALEN);    // 查询结果已填充
 
-    printf("mac address: ");
-    for(int i = 0; i < ETH_ALEN; i += 1) {
-        printf("%x ", ea->arp_tha[i]);
-    }
-    printf("\n");
+//    printf("mac address: ");
+//    for(int i = 0; i < ETH_ALEN; i += 1) {
+//        printf("%x ", ea->arp_tha[i]);
+//    }
+//    printf("\n");
 
     // 发送出去
     iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));

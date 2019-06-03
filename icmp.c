@@ -14,7 +14,7 @@
 // const是告诉coder，这里不能free和修改
 // 为什么会有第一个参数？不是应该根据type、code、dst_ip直接发吗？
 // 如果第一个参数是纯数据的话，应该有dst_ip参数，但是没有，所以第一个参数是别的包(⊙﹏⊙)b
-// todo: 这里应该只设置icmp的包头，将ip包头的部分的工作交给ip_send_packet来完成？
+// todo: 这里应该讲封装好的包由ip_send_packet发送
 void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 {
 	fprintf(stderr, "TODO: malloc and send icmp packet.\n");
@@ -25,6 +25,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 	rt_entry_t * rt = longest_prefix_match(dst_ip);
 	if(rt) {
 		// malloc an icmp packet
+
 		// ip header
 		size_t packet_length = ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr);
 		char * packet = (char *)malloc(packet_length);
@@ -35,7 +36,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 		struct icmphdr * packet_icmphdr = (struct icmphdr *)(packet + ETHER_HDR_SIZE + packet_iphdr->ihl);
 		packet_icmphdr->code = code;
 		packet_icmphdr->type = type;
-		packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
+		packet_icmphdr->checksum = htons(icmp_checksum(packet_icmphdr, sizeof(struct icmphdr)));		// 要在最后面设置checksum
 
 		// send
 		iface_send_packet_by_arp(rt->iface, dst_ip, packet, (int)packet_length);
