@@ -14,6 +14,7 @@
 
 // send an arp request: encapsulate an arp request packet, send it out through
 // iface_send_packet
+// 只要超过了一字节，接受后、发送前都要转换字节序
 void arp_send_request(iface_info_t *iface, u32 dst_ip)
 {
 	fprintf(stderr, "TODO: send arp request when lookup failed in arpcache.\n");
@@ -34,7 +35,7 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 
     ea->arp_hln = ETH_ALEN; // 6字节                 // arp
     ea->arp_pln = 4;        // 4字节
-    ea->arp_op = htons(ARPOP_REQUEST);                  // todo：只要超过了一字节，接受后、发送前都要转换字节序
+    ea->arp_op = htons(ARPOP_REQUEST);
     memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
     ea->arp_spa = htonl(iface->ip);
     ea->arp_tpa = htonl(dst_ip);
