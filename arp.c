@@ -124,6 +124,7 @@ void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *packet, int
 
 	u8 dst_mac[ETH_ALEN];
 	int found = arpcache_lookup(dst_ip, dst_mac);
+    printf("dst ip: %x \n", dst_ip);
 	if (found) {
 		// log(DEBUG, "found the mac of %x, send this packet", dst_ip);
         struct ether_arp * ea = packet_to_arp_hdr(packet);
