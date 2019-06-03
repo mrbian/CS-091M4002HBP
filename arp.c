@@ -92,19 +92,23 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
 {
 	fprintf(stderr, "TODO: process arp packet: arp request & arp reply.\n");
     struct ether_arp * ea = packet_to_arp_hdr(packet);
-    u16 arp_op = ntohs(ea->arp_op);
-    u32 arp_tpa = ntohl(ea->arp_tpa);
-    if(arp_op == ARPOP_REQUEST) {
+
+    // 进行字节序转换
+    ea->arp_op = ntohs(ea->arp_op);
+    ea->arp_tpa = ntohl(ea->arp_tpa);
+    ea->arp_spa = ntohl(ea->arp_spa);
+
+    if(ea->arp_op == ARPOP_REQUEST) {
         // 根据arp请求源添加arpcache表项
         arpcache_insert(ea->arp_spa, ea->arp_sha);
         // 查看请求的是否是本机ip地址
-        if(arp_tpa == iface->ip) {                                      // 如果是，则填充mac地址后发出回复
+        if(ea->arp_tpa == iface->ip) {                                      // 如果是，则填充mac地址后发出回复
             memcpy(ea->arp_tha, iface->mac, ETH_ALEN);
             arp_send_reply(iface, ea);
         } else {                                                            // 如果不是，则进行查询arp表等操作
             iface_send_packet_by_arp(iface, ea->arp_tpa, packet, len);
         }
-    } else if(arp_op == ARPOP_REPLY){
+    } else if(ea->arp_op == ARPOP_REPLY){
         arpcache_insert(ea->arp_tpa, ea->arp_tha);              // 将查询结果插入ARP表
     }
 
