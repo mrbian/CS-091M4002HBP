@@ -171,6 +171,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 // request has been sent 5 times without receiving arp reply, for each
 // pending packet, send icmp packet (DEST_HOST_UNREACHABLE), and drop these
 // packets.
+// todo: 这里需要测试
 void *arpcache_sweep(void *arg)
 {
     int i = 0;

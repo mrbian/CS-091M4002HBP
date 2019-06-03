@@ -25,6 +25,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 	rt_entry_t * rt = longest_prefix_match(dst_ip);
 	if(rt) {
 		// malloc an icmp packet
+		printf("已匹配到 \n");
 
 		// ip header
 		size_t packet_length = ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr);
