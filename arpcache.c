@@ -62,7 +62,7 @@ int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
     int i = 0;
     int flag = 0;  // 默认未找到: 0
     for (i = 0; i < MAX_ARP_SIZE; i += 1) {
-		printf("entry ip: %x \n", arpcache.entries[i].ip4);
+		printf("entry ip: %x, valid: %d \n", arpcache.entries[i].ip4, arpcache.entries[i].valid);
         if(arpcache.entries[i].ip4 == ip4 && arpcache.entries[i].valid == 1) {  // 如果找到且有效
             flag = 1;                           // flag置为找到: 1
             memcpy(mac, arpcache.entries[i].mac, sizeof(u8) * ETH_ALEN);  // MAC地址赋值
@@ -135,7 +135,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
     // 先向ARP表中插入一个IP到MAC地址映射条目，放到第一个位置
 	struct arp_cache_entry *entry = (struct arp_cache_entry *)malloc(sizeof(struct arp_cache_entry));
 	entry->ip4 = ip4;
-	memcpy(entry->mac, mac, sizeof(u8) * ETH_ALEN);
+	memcpy(entry->mac, mac, ETH_ALEN);
 	time(&entry->added);
 	entry->valid = 1;
 	int i;
@@ -143,19 +143,17 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 		arpcache.entries[i] = arpcache.entries[i - 1];
 	}
 	arpcache.entries[0] = *entry;
+	printf("entry ip: %x, valid: %d \n", arpcache.entries[0].ip4, arpcache.entries[0].valid);
 
 	// 然后遍历缓存列表，如果有对应IP地址的待决包，将MAC地址填充好发送出去
 	struct arp_req *req = NULL;
 	struct cached_pkt *pkt = NULL;
 	list_for_each_entry(req, &arpcache.req_list, list) {
 		if(req->ip4 == ip4) {
-			req->retries += 1;   // 记录发送次数和时间
-			time(&req->sent);
-
 			pkt = NULL;
 			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
-				struct ether_header * eh = (struct ether_header *)pkt;
-				memcpy(eh->ether_dhost, mac, ETH_ALEN);
+				struct ether_arp * ea = packet_to_arp_hdr(pkt->packet);
+				memcpy(ea->arp_tha, mac, ETH_ALEN);
 				iface_send_packet(req->iface, pkt->packet, pkt->len);
 			}
 		}
