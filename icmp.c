@@ -21,6 +21,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 	// 获取到ip目的地址
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(in_pkt);
 	pkt_ip_hdr->saddr = ntohl(pkt_ip_hdr->saddr);			// 不只是这里会用到，其他函数也会用到，因此大小字节序要赋值
+	pkt_ip_hdr->daddr = ntohl(pkt_ip_hdr->daddr);
 
 	rt_entry_t * rt = longest_prefix_match(pkt_ip_hdr->saddr);
 	if(rt) {
