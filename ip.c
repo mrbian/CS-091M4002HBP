@@ -33,18 +33,13 @@ rt_entry_t *longest_prefix_match(u32 dst)
 {
 	fprintf(stderr, "TODO: longest prefix match for the packet.\n");
 	rt_entry_t * result = NULL;
-	int max_mask_len = 0;    // 最长子网掩码的长度
-	int count = 0;
+	int max_mask = 0;    // 最大子网掩码
 
 	rt_entry_t * ele = NULL;
 	list_for_each_entry(ele, &rtable, list) {
 		if((ele->dest & ele->mask) == (dst & ele->mask)) {				// 如果按位与有相同的
-			count = 0;
-			while(((ele->mask >> count) & 1) == 0) {						// 右移count位取最后一位，当最后一位为1时结束计数
-				count += 1;
-			}
-			if((32 - count) > max_mask_len) {							// 如果本子网掩码是最长的（要不要带等号）
-				max_mask_len = 32 - count;
+			if(ele->mask >= max_mask) {							// 如果本子网掩码是最大的
+				max_mask = ele->mask;
 				result = ele;
 			}
 		}
