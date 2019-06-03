@@ -86,6 +86,8 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
         }
     } else if(ea->arp_op == ARPOP_REPLY){
         arpcache_insert(ea->arp_tpa, ea->arp_tha);              // 将查询结果插入ARP表
+    } else {
+        printf("字节序问题？\n");
     }
 
     free(packet);               // 这里是循环，要清理内存
