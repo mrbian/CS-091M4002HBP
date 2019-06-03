@@ -19,7 +19,7 @@ void arpcache_init()
 {
 	bzero(&arpcache, sizeof(arpcache_t));
 
-	init_list_head(&(arpcache.req_list));   // todo: 难道说malloc了一个struct，内部的各种结构体都自动malloc了？
+	init_list_head(&(arpcache.req_list));   // todo: 难道说malloc了一个struct，内部的各种结构体都自动malloc了？答：是的，但必须是结构体变量
 
 	pthread_mutex_init(&arpcache.lock, NULL);
 

@@ -82,8 +82,10 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
     if(arp_op == ARPOP_REQUEST) {
         found = arpcache_lookup(ea->arp_tpa, dst_mac);
         if(found) {                                             // 如果找到
-            memcpy(ea->arp_tpa, dst_mac, ETH_ALEN);
+            memcpy(ea->arp_tha, dst_mac, ETH_ALEN);
             arp_send_reply(iface, ea);
+        } else {                                                // 如果没找到，那就发送arp请求
+            arp_send_request(iface, ea->arp_tpa);
         }
     } else if(arp_op == ARPOP_REPLY){
         arpcache_insert(ea->arp_tpa, ea->arp_tha);              // 将查询结果插入ARP表
