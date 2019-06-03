@@ -36,9 +36,11 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
     ea->arp_hln = ETH_ALEN; // 6字节                 // arp
     ea->arp_pln = 4;        // 4字节
     ea->arp_op = htons(ARPOP_REQUEST);
-    memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
+
     ea->arp_spa = htonl(iface->ip);
+    memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
     ea->arp_tpa = htonl(dst_ip);
+    // tha置空（00 00 00 00 00 00）
 
     // 发送出去
     iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
@@ -64,8 +66,9 @@ void arp_send_reply(iface_info_t *iface, struct ether_arp *req_hdr)
     ea->arp_hln = ETH_ALEN; // 6字节                 // arp
     ea->arp_pln = 4;        // 4字节
     ea->arp_op = htons(ARPOP_REPLY);
-    memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
+
     ea->arp_spa = htonl(iface->ip);
+    memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
     ea->arp_tpa = htonl(req_hdr->arp_spa);
     memcpy(ea->arp_tha, req_hdr->arp_tha, ETH_ALEN);    // 查询结果已填充
 
@@ -80,7 +83,10 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
     u16 arp_op = ntohs(ea->arp_op);
     u32 arp_tpa = ntohl(ea->arp_tpa);
     if(arp_op == ARPOP_REQUEST) {
-        if(arp_tpa == iface->ip) {                                      // 先查看是否是本机ip地址，如果是，则填充mac地址后发出
+        // 根据arp请求源添加arpcache表项
+        arpcache_insert(ea->arp_spa, ea->arp_sha);
+        // 查看请求的是否是本机ip地址
+        if(arp_tpa == iface->ip) {                                      // 如果是，则填充mac地址后发出回复
             memcpy(ea->arp_tha, iface->mac, ETH_ALEN);
             arp_send_reply(iface, ea);
         } else {                                                            // 如果不是，则进行查询arp表等操作
