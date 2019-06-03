@@ -10,6 +10,8 @@
 #define ARPOP_REQUEST 1
 #define ARPOP_REPLY 2
 
+// Arp包的第一个字段硬件类型Hard Type必需是1，硬件大小Hard Size大小为6，协议类型Prot Type是ipv4地址值为0x0800，协议长度Prot Size大小是4
+
 // 28B，这里是arp包的内容（PPT P14蓝色部分），arp包内容前面还有ether_header（见ether_h）这样一个包头（PPT P14黄色部分），所以取包内容的时候指针要移动（见ip.h里面的packet_to_ip_hdr）
 struct ether_arp {
     u16 arp_hrd;		/* Format of hardware address.  */

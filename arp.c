@@ -26,6 +26,7 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
     struct ether_arp *ea = packet_to_arp_hdr(packet);
 
     // 设置各项的值
+    // ether
     memcpy(eh->ether_shost, iface->mac, ETH_ALEN);  // ether
     int i;
     for(i = 0; i < ETH_ALEN; i += 1) {
@@ -33,6 +34,9 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 	}
     eh->ether_type = htons(ETH_P_ARP);
 
+    // arp
+    ea->arp_hrd = htons(1);
+    ea->arp_pro = htons(0x0800);
     ea->arp_hln = ETH_ALEN; // 6字节                 // arp
     ea->arp_pln = 4;        // 4字节
     ea->arp_op = htons(ARPOP_REQUEST);
@@ -63,6 +67,8 @@ void arp_send_reply(iface_info_t *iface, struct ether_arp *req_hdr)
     memcpy(eh->ether_dhost, req_hdr->arp_sha, ETH_ALEN);
     eh->ether_type = htons(ETH_P_ARP);
 
+    ea->arp_hrd = htons(1);
+    ea->arp_pro = htons(0x0800);
     ea->arp_hln = ETH_ALEN; // 6字节                 // arp
     ea->arp_pln = 4;        // 4字节
     ea->arp_op = htons(ARPOP_REPLY);
