@@ -78,8 +78,9 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
 	fprintf(stderr, "TODO: process arp packet: arp request & arp reply.\n");
     struct ether_arp * ea = packet_to_arp_hdr(packet);
     u16 arp_op = ntohs(ea->arp_op);
+    u32 arp_tpa = ntohl(ea->arp_tpa);
     if(arp_op == ARPOP_REQUEST) {
-        if(ea->arp_tpa == iface->ip) {                                      // 先查看是否是本机ip地址，如果是，则填充mac地址后发出
+        if(arp_tpa == iface->ip) {                                      // 先查看是否是本机ip地址，如果是，则填充mac地址后发出
             memcpy(ea->arp_tha, iface->mac, ETH_ALEN);
             arp_send_reply(iface, ea);
         } else {                                                            // 如果不是，则进行查询arp表等操作
