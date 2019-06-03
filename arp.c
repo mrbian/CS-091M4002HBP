@@ -30,14 +30,14 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
     for(i = 0; i < ETH_ALEN; i += 1) {
 		eh->ether_dhost[i] = 0xFF;   // 各项全为FF
 	}
-    eh->ether_type = ETH_P_ARP;
+    eh->ether_type = htons(ETH_P_ARP);
 
     ea->arp_hln = ETH_ALEN; // 6字节                 // arp
     ea->arp_pln = 4;        // 4字节
-    ea->arp_op = ARPOP_REQUEST;
+    ea->arp_op = htons(ARPOP_REQUEST);                  // todo：只要超过了一字节，接受后、发送前都要转换字节序
     memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
-    ea->arp_spa = iface->ip;
-    ea->arp_tpa = dst_ip;
+    ea->arp_spa = htonl(iface->ip);
+    ea->arp_tpa = htonl(dst_ip);
 
     // 发送出去
     iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
