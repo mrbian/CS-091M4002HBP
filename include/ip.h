@@ -18,21 +18,21 @@
 #define IP_DF	0x4000		// Do not Fragment
 struct iphdr {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-    unsigned int ihl:4;
+    unsigned int ihl:4;			// IP包头长度，注意IP包头可变长，最少20字节
     unsigned int version:4;
 #elif __BYTE_ORDER == __BIG_ENDIAN
     unsigned int version:4;
     unsigned int ihl:4;
 #endif
-    u8 tos;
-    u16 tot_len;
-    u16 id;
-    u16 frag_off;
-    u8 ttl;
-    u8 protocol;
-    u16 checksum;
-    u32 saddr;
-    u32 daddr;
+    u8 tos;			// 服务字段（最小时延、吞吐量等）
+    u16 tot_len;	// 包总长度（包括头部和数据部分）
+    u16 id;			// 标识分数据报（第几个包） if Fragment
+    u16 frag_off;	// 分包用
+    u8 ttl;			// time to live
+    u8 protocol;    // 是什么协议，为1时是ICMP协议
+    u16 checksum;   // 校验和
+    u32 saddr;		// 源IP地址
+    u32 daddr;		// 目的IP地址
 };
 
 #define IP_BASE_HDR_SIZE sizeof(struct iphdr)

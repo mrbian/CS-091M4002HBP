@@ -10,22 +10,29 @@
 #define ARPOP_REQUEST 1
 #define ARPOP_REPLY 2
 
-// 28B
+// 28B，这里是arp包的内容（PPT P14蓝色部分），arp包内容前面还有ether_header（见ether_h）这样一个包头（PPT P14黄色部分），所以取包内容的时候指针要移动（见ip.h里面的packet_to_ip_hdr）
 struct ether_arp {
     u16 arp_hrd;		/* Format of hardware address.  */
     u16 arp_pro;		/* Format of protocol address.  */
     u8	arp_hln;		/* Length of hardware address.  */  // 以字节为单位，长度为1即8bit
     u8	arp_pln;		/* Length of protocol address.  */  // 4字节，32bit，IPv4地址长度
     u16 arp_op;			/* ARP opcode (command).  */        // 0x01为ARP请求，0x02为ARP应答
-	u8	arp_sha[ETH_ALEN];	/* sender hardware address */   // ARP包发送方MAC地址，6字节，48bit
+
+    u8	arp_sha[ETH_ALEN];	/* sender hardware address */   // ARP包发送方MAC地址，6字节，48bit，即发出此arp包的主机的MAC地址
 	u32	arp_spa;		/* sender protocol address */		// ARP包发送方IPv4地址
-	u8	arp_tha[ETH_ALEN];	/* target hardware address */   // ARP包目的MAC地址
-	u32	arp_tpa;		/* target protocol address */		// ARP包目的IPv4地址
+
+    u8	arp_tha[ETH_ALEN];	/* target hardware address */   // ARP查询结果MAC地址
+	u32	arp_tpa;		/* target protocol address */		// ARP待查询的IPv4地址
 } __attribute__ ((packed));
 
 void handle_arp_packet(iface_info_t *info, char *pkt, int len);
 void arp_send_request(iface_info_t *iface, u32 dst_ip);
 void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *pkt, int len);
+
+// add a function here
+struct ether_arp * packet_to_arp_hdr(const char *packet) {
+    return (struct ether_arp *)(packet + ETHER_HDR_SIZE);
+}
 
 #endif
 

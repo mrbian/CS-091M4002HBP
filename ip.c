@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <rtable.h>
 
 // initialize ip header 
 void ip_init_hdr(struct iphdr *ip, u32 saddr, u32 daddr, u16 len, u8 proto)
@@ -31,7 +32,25 @@ void ip_init_hdr(struct iphdr *ip, u32 saddr, u32 daddr, u16 len, u8 proto)
 rt_entry_t *longest_prefix_match(u32 dst)
 {
 	fprintf(stderr, "TODO: longest prefix match for the packet.\n");
-	return NULL;
+	rt_entry_t * result = NULL;
+	int max_mask_len = 0;    // 最长子网掩码的长度
+	int count = 0;
+
+	rt_entry_t * ele = NULL;
+	list_for_each_entry(ele, &rtable, list) {
+		if((ele->dest & ele->mask) == (dst & ele->mask)) {				// 如果按位与有相同的
+			count = 0;
+			while(((ele->mask >> count) & 1) == 0) {						// 右移count位取最后一位，当最后一位为1时结束计数
+				count += 1;
+			}
+			if((32 - count) > max_mask_len) {							// 如果本子网掩码是最长的（要不要带等号）
+				max_mask_len = 32 - count;
+				result = ele;
+			}
+		}
+	}
+
+	return result;
 }
 
 // send IP packet
@@ -41,4 +60,5 @@ rt_entry_t *longest_prefix_match(u32 dst)
 void ip_send_packet(char *packet, int len)
 {
 	fprintf(stderr, "TODO: send ip packet.\n");
+
 }

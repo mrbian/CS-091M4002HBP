@@ -17,7 +17,7 @@ void iface_send_packet(iface_info_t *iface, char *packet, int len)
 	addr.sll_family = AF_PACKET;
 	addr.sll_ifindex = iface->index;
 	addr.sll_halen = ETH_ALEN;
-	addr.sll_protocol = htons(ETH_P_ARP);
+	addr.sll_protocol = htons(ETH_P_ARP);		// 发送前转换成大端！！！
 	struct ether_header *eh = (struct ether_header *)packet;
 	memcpy(addr.sll_addr, eh->ether_dhost, ETH_ALEN);
 

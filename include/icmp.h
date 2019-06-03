@@ -6,10 +6,10 @@
 #include "base.h"
 
 struct icmphdr {
-	u8	type;
-	u8	code;
-	u16	checksum;
-	union {
+	u8	type;			// 标识icmp类型
+	u8	code;			// 用以标识icmp类型中的不同结果
+	u16	checksum;		// 校验和
+	union {				// 不同类型的复合字段，使用union节省内存
 		struct {
 			u16 identifier;
 			u16 sequence;

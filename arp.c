@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <base.h>
 
 // #include "log.h"
 
@@ -16,27 +17,30 @@
 void arp_send_request(iface_info_t *iface, u32 dst_ip)
 {
 	fprintf(stderr, "TODO: send arp request when lookup failed in arpcache.\n");
-    // 包装好一个arp请求包，并且把它发出去
-	struct ether_arp *arp_req_pkt = (struct ether_arp *)malloc(sizeof(struct ether_arp));
-	bzero(arp_req_pkt, sizeof(struct ether_arp));
+    // 包装好一个arp请求包，并且把它发出去（注意要把以太网首部也带上）
+    char *packet = (char *)malloc(sizeof(struct ether_header) + sizeof(struct ether_arp));
+    bzero(packet, sizeof(struct ether_header) + sizeof(struct ether_arp));
 
-	char *packet = (char *)malloc(sizeof(struct ether_arp));
-	arp_req_pkt->arp_op = 0x01;
-	int i;
-	for(i = 0; i < ETH_ALEN; i += 1) {
-		arp_req_pkt->arp_tha[i] = 0xFF;   // 各项全为FF
+    struct ether_header *eh = (struct ether_header *)packet;
+    struct ether_arp *ea = packet_to_arp_hdr(packet);
+
+    // 设置各项的值
+    memcpy(eh->ether_shost, iface->mac, ETH_ALEN);  // ether
+    int i;
+    for(i = 0; i < ETH_ALEN; i += 1) {
+		eh->ether_dhost[i] = 0xFF;   // 各项全为FF
 	}
-	memcpy(arp_req_pkt->arp_sha, iface->mac, ETH_ALEN);
+    eh->ether_type = ETH_P_ARP;
 
-	arp_req_pkt->arp_spa = iface->ip;
-	arp_req_pkt->arp_tpa = dst_ip;
-	arp_req_pkt->arp_hln = ETH_ALEN;
-	arp_req_pkt->arp_pln = sizeof(dst_ip);   // todo: 这里是protocol address length？
-	memcpy(packet, arp_req_pkt, sizeof(struct ether_arp));
-//	printf("size of packet is %d \n", (int) sizeof(packet));   // todo: 64位系统指针是8B  // 结束符'\0'对应的16进制是什么？
-	struct ether_arp *new = (struct ether_arp*)malloc(sizeof(struct ether_arp));
-	memcpy(new, packet, sizeof(struct ether_arp));
-	printf("%d \n", new->arp_op);
+    ea->arp_hln = ETH_ALEN; // 6字节                 // arp
+    ea->arp_pln = 4;        // 4字节
+    ea->arp_op = ARPOP_REQUEST;
+    memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
+    ea->arp_spa = iface->ip;
+    ea->arp_tpa = dst_ip;
+
+    // 发送出去
+    iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
 }
 
 // send an arp reply packet: encapsulate an arp reply packet, send it out
@@ -44,11 +48,47 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 void arp_send_reply(iface_info_t *iface, struct ether_arp *req_hdr)
 {
 	fprintf(stderr, "TODO: send arp reply when receiving arp request.\n");
+    // 根据arp请求内容包装好一个arp回复包，并把它发送出去
+    char *packet = (char *)malloc(sizeof(struct ether_header) + sizeof(struct ether_arp));
+    bzero(packet, sizeof(struct ether_header) + sizeof(struct ether_arp));
+
+    struct ether_header *eh = (struct ether_header *)packet;
+    struct ether_arp *ea = packet_to_arp_hdr(packet);
+
+    // 设置各项的值
+    memcpy(eh->ether_shost, iface->mac, ETH_ALEN);  // ether
+    memcpy(eh->ether_dhost, req_hdr->arp_sha, ETH_ALEN);
+    eh->ether_type = ETH_P_ARP;
+
+    ea->arp_hln = ETH_ALEN; // 6字节                 // arp
+    ea->arp_pln = 4;        // 4字节
+    ea->arp_op = ARPOP_REPLY;
+    memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
+    ea->arp_spa = iface->ip;
+    ea->arp_tpa = req_hdr->arp_spa;
+    memcpy(ea->arp_tha, req_hdr->arp_tha, ETH_ALEN);    // 查询结果已有
+
+    // 发送出去
+    iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
 }
 
 void handle_arp_packet(iface_info_t *iface, char *packet, int len)
 {
 	fprintf(stderr, "TODO: process arp packet: arp request & arp reply.\n");
+    struct ether_arp * ea = packet_to_arp_hdr(packet);
+    int found;
+    u8 dst_mac[ETH_ALEN];
+    if(ea->arp_op == ARPOP_REQUEST) {
+        found = arpcache_lookup(ea->arp_tpa, dst_mac);
+        if(found) {                                             // 如果找到
+            memcpy(ea->arp_tpa, dst_mac, ETH_ALEN);
+            arp_send_reply(iface, ea);
+        }
+    } else if(ea->arp_op == ARPOP_REPLY){
+        arpcache_insert(ea->arp_tpa, ea->arp_tha);              // 将查询结果插入ARP表
+    }
+
+    free(packet);               // 这里是循环，要清理内存
 }
 
 // send (IP) packet through arpcache lookup 
@@ -58,7 +98,7 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
 // this packet into arpcache, and send arp request.
 void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *packet, int len)
 {
-	struct ether_header *eh = (struct ether_header *)packet;
+	struct ether_header *eh = (struct ether_header *)packet;        // 可以直接强制转换
 	memcpy(eh->ether_shost, iface->mac, ETH_ALEN);
 	eh->ether_type = htons(ETH_P_IP);
 

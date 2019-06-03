@@ -43,7 +43,7 @@ void arpcache_test(){
     u32 ip4 = 0xA0000001;  // 10.0.0.1
     char *ip_str = "10.0.0.1";
     u8 mac[ETH_ALEN] = {1, 2, 3, 4, 5, 6};  // 01-01-01-01-01-01
-    char *packet = "test1";
+    char *packet = "test1";         // todo: 要用正确的struct来生成packet
 
     int result = arpcache_lookup(ip4, mac);  // should be not found
     if(result == 0) {
@@ -67,6 +67,6 @@ void arpcache_test(){
 
 void arp_test() {
     iface_info_t *iface = iface_init();
-    u32 dst_ip = 0xA0000001;
+    u32 dst_ip = 0xA0000001;            // todo: dst_ip is -160313131 ?
     arp_send_request(iface, dst_ip);
 }

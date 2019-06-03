@@ -94,8 +94,8 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
         if (ele->ip4 == ip4) {  // 若找到
             flag = 1;
             struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
-			new_pkt->packet = (char *)malloc(sizeof(char) * strlen(packet));   			// 注意这里要复制指针指向的内容以保证程序的健壮性
-			strcpy(new_pkt->packet, packet);
+			new_pkt->packet = (char *)malloc(sizeof(struct ether_header) + sizeof(struct ether_arp));   			// 注意这里要复制指针指向的内容以保证程序的健壮性
+			memcpy(new_pkt->packet, packet, len);
             new_pkt->len = len;
 			init_list_head(&new_pkt->list);
             list_add_tail(&new_pkt->list, &ele->cached_packets);                                                           // 将包对象串上去
@@ -113,12 +113,11 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 		init_list_head(&new_req->cached_packets);                                       // 初始化包节点
         init_list_head(&new_req->list);													// 将缓存对象串上去
         list_add_tail(&new_req->list, &arpcache.req_list);
-
         // 再新建包对象并加入缓存对象的链表
         struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
 		// 给包对象初始化值
-		new_pkt->packet = (char *)malloc(sizeof(char) * strlen(packet));
-		strcpy(new_pkt->packet, packet);
+		new_pkt->packet = (char *)malloc(sizeof(struct ether_header) + sizeof(struct ether_arp));
+		memcpy(new_pkt->packet, packet, len);
         new_pkt->len = len;
         init_list_head(&new_pkt->list);
         list_add_tail(&new_pkt->list, &new_req->cached_packets);                                   // 将包对象串上去
@@ -148,13 +147,6 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 	// 然后遍历缓存列表，如果有对应IP地址的待决包，将MAC地址填充好发送出去
 	struct arp_req *req = NULL;
 	struct cached_pkt *pkt = NULL;
-	char *tmpstr = (char *)malloc(sizeof(char) * 10);   // 10
-	char *macstr = (char *)malloc(sizeof(char) * (10 * ETH_ALEN));  // 10 * 6
-	for(i = 0; i < ETH_ALEN; i += 1) {  // 设置好macstr
-		sprintf(tmpstr, "%d", mac[i]);
-		strcat(macstr, tmpstr);
-	}
-
 	list_for_each_entry(req, &arpcache.req_list, list) {
 		if(req->ip4 == ip4) {
 			req->retries += 1;   // 记录发送次数和时间
@@ -162,13 +154,8 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 
 			pkt = NULL;
 			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
-
-				// todo: 这样填充header是否正确？
-				strcpy(tmpstr, macstr);
-				strcat(tmpstr, pkt->packet);
-				memcpy(pkt->packet, tmpstr, sizeof(char) * strlen(tmpstr));
-
-				pkt->len = (int)strlen(pkt->packet);
+				struct ether_header * eh = (struct ether_header *)pkt;
+				memcpy(eh->ether_dhost, mac, ETH_ALEN);
 				iface_send_packet(req->iface, pkt->packet, pkt->len);
 			}
 		}
@@ -234,7 +221,7 @@ void print_arp_cache_list() {
 	list_for_each_entry(req, &arpcache.req_list, list) {
         pkt = NULL;
         list_for_each_entry(pkt, &req->cached_packets, list) {
-            printf("Packet is %s \n", pkt->packet);
+			// print packet here
         }
 	}
 }

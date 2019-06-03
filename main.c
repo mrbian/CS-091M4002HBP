@@ -5,7 +5,6 @@
 #include "ip.h"
 #include "icmp.h"
 #include "rtable.h"
-#include "test.h"
 
 #include "log.h"
 
@@ -44,7 +43,7 @@ void handle_packet(iface_info_t *iface, char *packet, int len)
 	struct ether_header *eh = (struct ether_header *)packet;
 
 	// log(DEBUG, "got packet from %s, %d bytes, proto: 0x%04hx\n", 
-	// 		iface->name, len, ntohs(eh->ether_type));
+	// 		iface->name, len, ntohs(eh->ether_type));  网络是小端，主机是大端，因此要反过来
 	switch (ntohs(eh->ether_type)) {
 		case ETH_P_IP:
 			handle_ip_packet(iface, packet, len);
@@ -267,20 +266,14 @@ void ustack_run()
 
 int main(int argc, const char **argv)
 {
+	if (getuid() && geteuid()) {
+		printf("Permission denied, should be superuser!\n");
+		exit(1);
+	}
 
-//	if (getuid() && geteuid()) {
-//		printf("Permission denied, should be superuser!\n");
-//		exit(1);
-//	}
+	init_ustack();
 
-//	init_ustack();
-//	iface_info_t *iface = NULL;
-//
-//
-//	ustack_run();
-
-	arp_test();
-//    arpcache_test();
+	ustack_run();
 
 	return 0;
 }
