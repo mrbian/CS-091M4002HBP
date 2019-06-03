@@ -108,6 +108,7 @@ void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *packet, int
 	if (found) {
 		// log(DEBUG, "found the mac of %x, send this packet", dst_ip);
         struct ether_arp * ea = packet_to_arp_hdr(packet);
+        memcpy(ea->arp_tha, dst_mac, ETH_ALEN);
         arp_send_reply(iface, ea);
 	} else {
 		// log(DEBUG, "lookup %x failed, pend this packet", dst_ip);
