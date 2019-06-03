@@ -10,7 +10,7 @@
 #include <base.h>
 
 // send icmp packet
-// 新建一个icmp包利用ip_send_packet发出去
+// 根据in_pkt（发送方的包）新建一个icmp包利用ip_send_packet发出去
 // const是告诉coder，这里不能free和修改
 // 为什么会有第一个参数？不是应该根据type、code、dst_ip直接发吗？
 // 如果第一个参数是纯数据的话，应该有dst_ip参数，但是没有，所以第一个参数是别的包(⊙﹏⊙)b
@@ -20,9 +20,9 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 	fprintf(stderr, "TODO: malloc and send icmp packet.\n");
 	// 获取到ip目的地址
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(in_pkt);
-	pkt_ip_hdr->daddr = ntohl(pkt_ip_hdr->daddr);			// 不只是这里会用到，其他函数也会用到，因此要转换回来
+	pkt_ip_hdr->saddr = ntohl(pkt_ip_hdr->saddr);			// 不只是这里会用到，其他函数也会用到，因此大小字节序要赋值
 
-	rt_entry_t * rt = longest_prefix_match(pkt_ip_hdr->daddr);
+	rt_entry_t * rt = longest_prefix_match(pkt_ip_hdr->saddr);
 	if(rt) {
 		// malloc an icmp packet
 		printf("已匹配到 \n");
