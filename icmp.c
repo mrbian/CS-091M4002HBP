@@ -20,9 +20,9 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 	fprintf(stderr, "TODO: malloc and send icmp packet.\n");
 	// 获取到ip目的地址
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(in_pkt);
-	u32 dst_ip = ntohl(pkt_ip_hdr->daddr);
+	pkt_ip_hdr->daddr = ntohl(pkt_ip_hdr->daddr);			// 不只是这里会用到，其他函数也会用到，因此要转换回来
 
-	rt_entry_t * rt = longest_prefix_match(dst_ip);
+	rt_entry_t * rt = longest_prefix_match(pkt_ip_hdr->daddr);
 	if(rt) {
 		// malloc an icmp packet
 		printf("已匹配到 \n");
@@ -31,7 +31,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 		size_t packet_length = ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr);
 		char * packet = (char *)malloc(packet_length);
 		struct iphdr * packet_iphdr = packet_to_ip_hdr(packet);
-		ip_init_hdr(packet_iphdr, rt->iface->ip, dst_ip, sizeof(struct iphdr) + sizeof(struct icmphdr), 1);   // protocal IPPROTO_ICMP : 1
+		ip_init_hdr(packet_iphdr, rt->iface->ip, pkt_ip_hdr->daddr, sizeof(struct iphdr) + sizeof(struct icmphdr), 1);   // protocal IPPROTO_ICMP : 1
 
 		// icmp header
 		struct icmphdr * packet_icmphdr = (struct icmphdr *)(packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4);
@@ -40,6 +40,6 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 		packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
 
 		// send
-		iface_send_packet_by_arp(rt->iface, dst_ip, packet, (int)packet_length);
+		iface_send_packet_by_arp(rt->iface, pkt_ip_hdr->daddr, packet, (int)packet_length);
 	}
 }
