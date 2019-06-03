@@ -30,7 +30,8 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip);
 void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *pkt, int len);
 
 // add a function here
-struct ether_arp * packet_to_arp_hdr(const char *packet) {
+// 不加static inline Link时会有multiple definition问题（多个.o文件都有此函数定义）
+static inline struct ether_arp * packet_to_arp_hdr(const char *packet) {
     return (struct ether_arp *)(packet + ETHER_HDR_SIZE);
 }
 

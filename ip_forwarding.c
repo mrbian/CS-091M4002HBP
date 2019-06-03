@@ -49,11 +49,6 @@ void handle_ip_packet(iface_info_t *iface, char *packet, int len)
 	u32 daddr = ntohl(ip->daddr);
 	if (daddr == iface->ip) {
 		fprintf(stderr, "TODO: reply to the sender if it is ping packet.\n");
-//		struct ether_header * eh = (struct ether_header *)packet;
-//		struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(packet);
-//		struct icmphdr * pkt_icmp_hdr = (struct icmphdr *)(packet + ETHER_HDR_SIZE + pkt_ip_hdr->ihl);
-//		char * in_pkt = (char *)(packet + ETHER_HDR_SIZE + pkt_ip_hdr->ihl + sizeof(struct icmphdr));		// 除ether头、ip头、icmp头之外的数据域
-//		int in_pkt_len = pkt_ip_hdr->tot_len - pkt_ip_hdr->ihl - sizeof(struct icmphdr);
 
 		icmp_send_packet(packet, len, 0, 0);
 		free(packet);
