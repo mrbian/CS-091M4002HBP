@@ -81,7 +81,7 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
     if(arp_op == ARPOP_REQUEST) {
         if(ea->arp_tpa == iface->ip) {                                      // 先查看是否是本机ip地址，如果是，则填充mac地址后发出
             memcpy(ea->arp_tha, iface->mac, ETH_ALEN);
-            arp_send_reply(iface, packet);
+            arp_send_reply(iface, ea);
         } else {                                                            // 如果不是，则进行查询arp表等操作
             iface_send_packet_by_arp(iface, ea->arp_tpa, packet, len);
         }
