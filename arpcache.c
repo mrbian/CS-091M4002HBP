@@ -178,7 +178,7 @@ void *arpcache_sweep(void *arg)
     time_t now;
 	while (1) {
 		sleep(1);
-		fprintf(stderr, "TODO: sweep arpcache periodically: remove old entries, resend arp requests .\n");
+//		fprintf(stderr, "TODO: sweep arpcache periodically: remove old entries, resend arp requests .\n");
         // 遍历arp缓存，删除超过15s的旧条目
         for(i = 0; i < MAX_ARP_SIZE; i += 1) {
             time(&now);

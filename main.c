@@ -275,5 +275,7 @@ int main(int argc, const char **argv)
 
 	ustack_run();
 
+	// init router table here
+
 	return 0;
 }
