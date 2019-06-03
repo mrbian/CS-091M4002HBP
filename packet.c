@@ -24,6 +24,8 @@ void iface_send_packet(iface_info_t *iface, char *packet, int len)
 	if (sendto(iface->fd, packet, len, 0, (const struct sockaddr *)&addr,
 				sizeof(struct sockaddr_ll)) < 0) {
  		perror("Send raw packet failed");
+	} else {
+		printf("packet sended\n");
 	}
 
 	free(packet);

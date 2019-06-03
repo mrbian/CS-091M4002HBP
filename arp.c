@@ -14,7 +14,7 @@
 
 // send an arp request: encapsulate an arp request packet, send it out through
 // iface_send_packet
-// 只要超过了一字节，接受后、发送前都要转换字节序
+// 一个变量只要超过了一字节，发送前要转换大小端字节序
 void arp_send_request(iface_info_t *iface, u32 dst_ip)
 {
 	fprintf(stderr, "TODO: send arp request when lookup failed in arpcache.\n");
@@ -77,8 +77,6 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
 {
 	fprintf(stderr, "TODO: process arp packet: arp request & arp reply.\n");
     struct ether_arp * ea = packet_to_arp_hdr(packet);
-    int found;
-    u8 dst_mac[ETH_ALEN];
     u16 arp_op = ntohs(ea->arp_op);
     if(arp_op == ARPOP_REQUEST) {
         iface_send_packet_by_arp(iface, ea->arp_tpa, packet, len);
@@ -86,7 +84,7 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
         arpcache_insert(ea->arp_tpa, ea->arp_tha);              // 将查询结果插入ARP表
     }
 
-    free(packet);               // 这里是循环，要清理内存
+    free(packet);               // 这里不断收包，要清理内存
 }
 
 // send (IP) packet through arpcache lookup 
