@@ -59,14 +59,14 @@ void arp_send_reply(iface_info_t *iface, struct ether_arp *req_hdr)
     // 设置各项的值
     memcpy(eh->ether_shost, iface->mac, ETH_ALEN);  // ether
     memcpy(eh->ether_dhost, req_hdr->arp_sha, ETH_ALEN);
-    eh->ether_type = ETH_P_ARP;
+    eh->ether_type = htons(ETH_P_ARP);
 
     ea->arp_hln = ETH_ALEN; // 6字节                 // arp
     ea->arp_pln = 4;        // 4字节
-    ea->arp_op = ARPOP_REPLY;
+    ea->arp_op = htons(ARPOP_REPLY);
     memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
-    ea->arp_spa = iface->ip;
-    ea->arp_tpa = req_hdr->arp_spa;
+    ea->arp_spa = htonl(iface->ip);
+    ea->arp_tpa = htonl(req_hdr->arp_spa);
     memcpy(ea->arp_tha, req_hdr->arp_tha, ETH_ALEN);    // 查询结果已有
 
     // 发送出去
@@ -81,13 +81,7 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
     u8 dst_mac[ETH_ALEN];
     u16 arp_op = ntohs(ea->arp_op);
     if(arp_op == ARPOP_REQUEST) {
-        found = arpcache_lookup(ea->arp_tpa, dst_mac);
-        if(found) {                                             // 如果找到
-            memcpy(ea->arp_tha, dst_mac, ETH_ALEN);
-            arp_send_reply(iface, ea);
-        } else {                                                // 如果没找到，那就发送arp请求
-            arp_send_request(iface, ea->arp_tpa);
-        }
+        iface_send_packet_by_arp(iface, ea->arp_tpa, packet, len);
     } else if(arp_op == ARPOP_REPLY){
         arpcache_insert(ea->arp_tpa, ea->arp_tha);              // 将查询结果插入ARP表
     }
@@ -98,7 +92,7 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
 // send (IP) packet through arpcache lookup 
 //
 // Lookup the mac address of dst_ip in arpcache. If it is found, fill the
-// ethernet header and emit the packet by iface_send_packet, otherwise, pending 
+// ethernet header and emit the packet by iface_send_packet(arp_send_request), otherwise, pending
 // this packet into arpcache, and send arp request.
 void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *packet, int len)
 {
@@ -110,11 +104,11 @@ void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *packet, int
 	int found = arpcache_lookup(dst_ip, dst_mac);
 	if (found) {
 		// log(DEBUG, "found the mac of %x, send this packet", dst_ip);
-		memcpy(eh->ether_dhost, dst_mac, ETH_ALEN);
-		iface_send_packet(iface, packet, len);
-	}
-	else {
+        struct ether_arp * ea = packet_to_arp_hdr(packet);
+        arp_send_reply(iface, ea);
+	} else {
 		// log(DEBUG, "lookup %x failed, pend this packet", dst_ip);
 		arpcache_append_packet(iface, dst_ip, packet, len);
+        arp_send_request(iface, dst_ip);
 	}
 }
