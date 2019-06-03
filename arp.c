@@ -126,9 +126,15 @@ void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *packet, int
 	int found = arpcache_lookup(dst_ip, dst_mac);
     printf("dst ip: %x \n", dst_ip);
 	if (found) {
+        printf("found !");
 		// log(DEBUG, "found the mac of %x, send this packet", dst_ip);
         struct ether_arp * ea = packet_to_arp_hdr(packet);
         memcpy(ea->arp_tha, dst_mac, ETH_ALEN);
+        printf("mac address: ");
+        for(int i = 0; i < ETH_ALEN; i += 1) {
+            printf("%x ", ea->arp_tha[i]);
+        }
+        printf("\n");
         iface_send_packet(iface, packet, len);
 	} else {
 		// log(DEBUG, "lookup %x failed, pend this packet", dst_ip);

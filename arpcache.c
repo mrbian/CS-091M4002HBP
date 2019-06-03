@@ -65,7 +65,7 @@ int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
     for (i = 0; i < MAX_ARP_SIZE; i += 1) {
         if(arpcache.entries[i].ip4 == ip4 && arpcache.entries[i].valid == 1) {  // 如果找到且有效
             flag = 1;                           // flag置为找到: 1
-            memcpy(arpcache.entries[i].mac, mac, sizeof(u8) * ETH_ALEN);  // MAC地址赋值
+            memcpy(mac, arpcache.entries[i].mac, sizeof(u8) * ETH_ALEN);  // MAC地址赋值
         }
     }
 
