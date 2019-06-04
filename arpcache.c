@@ -170,7 +170,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
                 printf("\n\n");
                 printf("将待决包发出, src mac is %x, dst mac is  %x\n", eh->ether_shost[0], eh->ether_dhost[0]);
                 for(i = 0; i < pkt->len; i += 1) {
-                    printf("%x ", *(pkt->packet + 1));
+                    printf("%x ", *(pkt->packet + i));
                 }
                 printf("\n\n");
                 iface_send_packet(req->iface, pkt->packet, pkt->len);
