@@ -16,10 +16,10 @@ void ip_forward_packet(u32 ip_dst, char *packet, int len)
 {
 //	fprintf(stderr, "TODO: forward ip packet.\n");
 	// check TTL
-	struct ether_header * eh = (struct ether_header *)packet;
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(packet);
+	pkt_ip_hdr->ttl -= 1;									// 收到包后，先进行-1，再进行判断(当一台路由器由到一个TTL值为1的数据包，会直接丢弃)
+	pkt_ip_hdr->checksum = ip_checksum(pkt_ip_hdr);  // 最后设置checksum
 	if(pkt_ip_hdr->ttl <= 0) {
-		// todo: send type = 11 ttl exceed
 		icmp_send_packet(packet, len, 11, 0);
 		free(packet);
 		return;
@@ -29,8 +29,6 @@ void ip_forward_packet(u32 ip_dst, char *packet, int len)
 	rt_entry_t * rt = longest_prefix_match(ip_dst);
 	if(rt) {
 		// update checksum and ttl
-		pkt_ip_hdr->ttl -= 1;
-		pkt_ip_hdr->checksum = ip_checksum(pkt_ip_hdr);  // 最后设置checksum
 		printf("iface->ip %x \n", rt->iface->ip);
 		iface_send_packet_by_arp(rt->iface, rt->gw == 0 ? ntohl(pkt_ip_hdr->daddr) : rt->gw, packet, len);
 	} else {
