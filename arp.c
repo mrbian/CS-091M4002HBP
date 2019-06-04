@@ -99,6 +99,9 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
     ea->arp_spa = ntohl(ea->arp_spa);
 
     if(ea->arp_op == ARPOP_REQUEST) {
+        if(ea->arp_spa == iface->ip) {              // 如果是本机发出的arp请求包，则直接忽略
+            return;
+        }
         // 根据arp请求源添加arpcache表项
         arpcache_insert(ea->arp_spa, ea->arp_sha);
         // 查看请求的是否是本机ip地址
