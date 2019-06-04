@@ -32,7 +32,6 @@ void ip_forward_packet(u32 ip_dst, char *packet, int len)
 		printf("iface->ip %x \n", rt->iface->ip);
 		iface_send_packet_by_arp(rt->iface, rt->gw == 0 ? ntohl(pkt_ip_hdr->daddr) : rt->gw, packet, len);
 	} else {
-		printf("??? \n");
 		free(packet);
 		return;
 	}
