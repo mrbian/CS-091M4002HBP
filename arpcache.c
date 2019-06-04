@@ -147,7 +147,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 	memcpy(entry->mac, mac, ETH_ALEN);
 	time(&entry->added);
 	entry->valid = 1;
-	free(&arpcache.entries[MAX_ARP_SIZE - 1]);		// 将要删掉的结构体free掉，防止内存泄露，提醒自己，有一个malloc就必须有一个free
+//	free(&arpcache.entries[MAX_ARP_SIZE - 1]);		// 将要删掉的结构体free掉，防止内存泄露，提醒自己，有一个malloc就必须有一个free（ERROR：invalid pointer）
 
 	for (i = MAX_ARP_SIZE - 1; i >= 0; i -= 1) {
 		arpcache.entries[i] = arpcache.entries[i - 1];
@@ -162,7 +162,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 		if(req->ip4 == ip4) {
 			pkt = NULL;
 			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
-
+				// todo
 			}
 		}
 	}
