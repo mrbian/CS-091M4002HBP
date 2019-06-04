@@ -47,7 +47,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 			case 3:
 				break;
 			case 11:
-
+				packet_iphdr->ttl = 1;			// 若为ttl重传，将ttl重置为1，checksum不需要更新
 				break;
 			default:
 				printf("unknown icmp type! \n");
