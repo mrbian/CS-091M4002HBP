@@ -139,8 +139,8 @@ void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *packet, int
         iface_send_packet(iface, packet, len);
 	} else {
 		// log(DEBUG, "lookup %x failed, pend this packet", dst_ip);
-		arpcache_append_packet(iface, dst_ip, packet, len);
-        arp_send_request(iface, dst_ip);
+		arpcache_append_packet(iface, dst_ip, packet, len);             // append_packet里面已send了一次request了
+//        arp_send_request(iface, dst_ip);
 	}
 }
 
