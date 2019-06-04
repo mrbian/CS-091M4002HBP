@@ -43,7 +43,7 @@ void handle_packet(iface_info_t *iface, char *packet, int len)
 	struct ether_header *eh = (struct ether_header *)packet;
 
 	// log(DEBUG, "got packet from %s, %d bytes, proto: 0x%04hx\n", 
-	// 		iface->name, len, ntohs(eh->ether_type));  网络是小端，主机是大端，因此要反过来
+	// 		iface->name, len, ntohs(eh->ether_type));  网络是小端，主机有可能是大端
 	switch (ntohs(eh->ether_type)) {
 		case ETH_P_IP:
 			handle_ip_packet(iface, packet, len);

@@ -22,7 +22,7 @@
 
 * 一种数据结构，利用宏复用给多种类型（list_head）；
 * 如何设置一个网络packet（利用char*与结构体变量的相互转换）；
-* 大小字节序真的需要注意（htonl, htons, ntohl, ntohs）；
+* 大小字节序真的需要注意（htonl, htons, ntohl, ntohs, n:network, h:host）；
 * 应该从上层往底层写，而不是从底层往上层写，底层函数可以先todo然后慢慢实现，上层要先有自己的逻辑；
 * 上层协议的包头包裹在下层协议的包头里面；
 * const在某些情况下很有必要，可以防止别的coder做一些错事；

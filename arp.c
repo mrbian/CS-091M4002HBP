@@ -105,8 +105,8 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
         if(ea->arp_tpa == iface->ip) {                                      // 如果是，则填充mac地址后发出回复
             memcpy(ea->arp_tha, iface->mac, ETH_ALEN);
             arp_send_reply(iface, ea);
-        } else {                                                            // 如果不是，则进行查询arp表等操作
-            iface_send_packet_by_arp(iface, ea->arp_tpa, packet, len);
+        } else {                                                            // 如果不是，则查找本机的arpcache表，若有结果，则发送arp回复
+            // todo
         }
     } else if(ea->arp_op == ARPOP_REPLY){
         arpcache_insert(ea->arp_tpa, ea->arp_tha);              // 将查询结果插入ARP表

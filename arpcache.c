@@ -152,9 +152,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 		if(req->ip4 == ip4) {
 			pkt = NULL;
 			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
-				struct ether_arp * ea = packet_to_arp_hdr(pkt->packet);
-				memcpy(ea->arp_tha, mac, ETH_ALEN);
-				iface_send_packet(req->iface, pkt->packet, pkt->len);
+				iface_send_packet_by_arp(req->iface, req->ip4, pkt->packet, pkt->len);
 			}
 		}
 	}
