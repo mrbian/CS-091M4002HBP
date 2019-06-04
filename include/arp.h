@@ -20,11 +20,11 @@ struct ether_arp {
     u8	arp_pln;		/* Length of protocol address.  */  // 4字节，32bit，IPv4地址长度
     u16 arp_op;			/* ARP opcode (command).  */        // 0x01为ARP请求，0x02为ARP应答
 
-    u8	arp_sha[ETH_ALEN];	/* sender hardware address */   // ARP包发送方MAC地址，6字节，48bit，即发出此arp包的主机的MAC地址
-	u32	arp_spa;		/* sender protocol address */		// ARP包发送方IPv4地址
+    u8	arp_sha[ETH_ALEN];	/* sender hardware address */   // ARP回复时，查询结果的mac地址
+	u32	arp_spa;		/* sender protocol address */		// ARP回复时，查询结果的ip地址
 
-    u8	arp_tha[ETH_ALEN];	/* target hardware address */   // ARP查询结果MAC地址
-	u32	arp_tpa;		/* target protocol address */		// ARP待查询的IPv4地址
+    u8	arp_tha[ETH_ALEN];	/* target hardware address */   // ARP请求时，此字段全空
+	u32	arp_tpa;		/* target protocol address */		// ARP请求时，待查ip地址
 } __attribute__ ((packed));
 
 void handle_arp_packet(iface_info_t *info, char *pkt, int len);

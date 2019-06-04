@@ -134,26 +134,29 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 	fprintf(stderr, "TODO: insert ip->mac entry, and send all the pending packets.\n");
 	// 查找是否已有ip4对应的条目，若有，则替换掉
 	int i = 0;
+    int flag = 0;
 	for (i = 0; i < MAX_ARP_SIZE; i += 1) {
 		if(arpcache.entries[i].ip4 == ip4) {
+            flag = 1;
 			memcpy(arpcache.entries[i].mac, mac, ETH_ALEN);		// 覆盖原来的值
-			return;
 		}
 	}
 
-	// 如果没有，创建一个，放到第一个的位置，其他项依次向后移动一位，将最新的内容放到前面，这样自动先入先出
-	struct arp_cache_entry *entry = (struct arp_cache_entry *)malloc(sizeof(struct arp_cache_entry));
-	entry->ip4 = ip4;
-	memcpy(entry->mac, mac, ETH_ALEN);
-	time(&entry->added);
-	entry->valid = 1;
+	if(flag == 0) {
+        // 如果没有，创建一个，放到第一个的位置，其他项依次向后移动一位，将最新的内容放到前面，这样自动先入先出
+        struct arp_cache_entry *entry = (struct arp_cache_entry *)malloc(sizeof(struct arp_cache_entry));
+        entry->ip4 = ip4;
+        memcpy(entry->mac, mac, ETH_ALEN);
+        time(&entry->added);
+        entry->valid = 1;
 //	free(&arpcache.entries[MAX_ARP_SIZE - 1]);		// 将要删掉的结构体free掉，防止内存泄露，提醒自己，有一个malloc就必须有一个free（ERROR：invalid pointer）
 
-	for (i = MAX_ARP_SIZE - 1; i >= 0; i -= 1) {
-		arpcache.entries[i] = arpcache.entries[i - 1];
-	}
-	arpcache.entries[0] = *entry;
-	printf("entry ip: %x, valid: %d \n", arpcache.entries[0].ip4, arpcache.entries[0].valid);
+        for (i = MAX_ARP_SIZE - 1; i >= 0; i -= 1) {
+            arpcache.entries[i] = arpcache.entries[i - 1];
+        }
+        arpcache.entries[0] = *entry;
+        printf("entry ip: %x, valid: %d \n", arpcache.entries[0].ip4, arpcache.entries[0].valid);
+    }
 
 	// 然后遍历缓存列表，如果有对应IP地址的待决包，将MAC地址填充好发送出去
 	struct arp_req *req = NULL;

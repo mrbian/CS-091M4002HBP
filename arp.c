@@ -45,7 +45,7 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
     memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
     ea->arp_tpa = htonl(dst_ip);
     // tha置空（00 00 00 00 00 00）
-    printf("arp request for target ip address: %x is sending \n", ea->arp_tpa);
+    printf("arp request for target ip address: %x is sending \n", dst_ip);
 
     // 发送出去
     iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
@@ -57,6 +57,7 @@ void arp_send_reply(iface_info_t *iface, struct ether_arp *req_hdr)
 {
 	fprintf(stderr, "TODO: send arp reply when receiving arp request.\n");
     // 根据arp请求内容包装好一个arp回复包，并把它发送出去
+    // 应答时，新包的源ip和源mac里就是查询结果
     char *packet = (char *)malloc(sizeof(struct ether_header) + sizeof(struct ether_arp));
     bzero(packet, sizeof(struct ether_header) + sizeof(struct ether_arp));
 
@@ -68,25 +69,28 @@ void arp_send_reply(iface_info_t *iface, struct ether_arp *req_hdr)
     memcpy(eh->ether_dhost, req_hdr->arp_sha, ETH_ALEN);
     eh->ether_type = htons(ETH_P_ARP);
 
-    ea->arp_hrd = htons(1);
+    ea->arp_hrd = htons(1);                         // arp
     ea->arp_pro = htons(0x0800);
-    ea->arp_hln = ETH_ALEN; // 6字节                 // arp
+    ea->arp_hln = ETH_ALEN; // 6字节
     ea->arp_pln = 4;        // 4字节
     ea->arp_op = htons(ARPOP_REPLY);
 
-    ea->arp_spa = htonl(iface->ip);
-    memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
     ea->arp_tpa = htonl(req_hdr->arp_spa);
-    memcpy(ea->arp_tha, req_hdr->arp_tha, ETH_ALEN);    // 查询结果已填充
+    memcpy(ea->arp_tha, req_hdr->arp_spa, ETH_ALEN);
 
-//    printf("mac address: ");
-//    for(int i = 0; i < ETH_ALEN; i += 1) {
-//        printf("%x ", ea->arp_tha[i]);
-//    }
-//    printf("\n");
-
-    // 发送出去
-    iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
+    // 先看是否是查询本机的ip地址，若是，则直接填充好发出
+    if(ea->arp_tpa == iface->ip) {
+        ea->arp_spa = htonl(iface->ip);
+        memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
+        iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
+    } else {                                            // 若不是，则查询
+        int found = arpcache_lookup(req_hdr->arp_tpa, req_hdr->arp_tha);
+        if(found) {
+            iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
+        } else {
+            free(packet);
+        }
+    }
 }
 
 void handle_arp_packet(iface_info_t *iface, char *packet, int len)
@@ -103,20 +107,14 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
     printf("ea->spa is %x \n", ea->arp_spa);
     printf("ea->tpa is %x \n", ea->arp_tpa);
 
+    arpcache_insert(ea->arp_spa, ea->arp_sha);              // 无论是arp请求还是arp回复，都要将源放入ARP表
+
     if(ea->arp_op == ARPOP_REQUEST) {
         printf("This is an arp request packet \n ");
-        // 根据arp请求源添加arpcache表项
-        arpcache_insert(ea->arp_spa, ea->arp_sha);
-        // 查看请求的是否是本机ip地址
-        if(ea->arp_tpa == iface->ip) {                                      // 如果是，则填充mac地址后发出回复
-            memcpy(ea->arp_tha, iface->mac, ETH_ALEN);
-            arp_send_reply(iface, ea);
-        } else {                                                            // 如果不是，则查找本机的arpcache表，若有结果，则发送arp回复
-            // todo
-        }
+        // 给予arp回复
+        arp_send_reply(iface, ea);
     } else if(ea->arp_op == ARPOP_REPLY){
         printf("This is an arp reply packet \n ");
-        arpcache_insert(ea->arp_tpa, ea->arp_tha);              // 将查询结果插入ARP表
     }
 
     free(packet);               // 这里不断收包，要清理内存
