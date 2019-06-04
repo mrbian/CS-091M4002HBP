@@ -132,14 +132,24 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 {
 	fprintf(stderr, "TODO: insert ip->mac entry, and send all the pending packets.\n");
-    // 先向ARP表中插入一个IP到MAC地址映射条目，放到第一个位置
+	// 查找是否已有ip4对应的条目，若有，则替换掉
+	int i = 0;
+	for (i = 0; i < MAX_ARP_SIZE; i += 1) {
+		if(arpcache.entries[i].ip4 == ip4) {
+			memcpy(arpcache.entries[i].mac, mac, ETH_ALEN);		// 覆盖原来的值
+			return;
+		}
+	}
+
+	// 如果没有，创建一个，放到第一个的位置，其他项依次向后移动一位，将最新的内容放到前面，这样自动先入先出
 	struct arp_cache_entry *entry = (struct arp_cache_entry *)malloc(sizeof(struct arp_cache_entry));
 	entry->ip4 = ip4;
 	memcpy(entry->mac, mac, ETH_ALEN);
 	time(&entry->added);
 	entry->valid = 1;
-	int i;
-	for (i = MAX_ARP_SIZE - 1; i >= 0; i -= 1) {  // 依次向后移动一位，将最新的内容放到前面，这样自动先入先出
+	free(&arpcache.entries[MAX_ARP_SIZE - 1]);		// 将要删掉的结构体free掉，防止内存泄露，提醒自己，有一个malloc就必须有一个free
+
+	for (i = MAX_ARP_SIZE - 1; i >= 0; i -= 1) {
 		arpcache.entries[i] = arpcache.entries[i - 1];
 	}
 	arpcache.entries[0] = *entry;
