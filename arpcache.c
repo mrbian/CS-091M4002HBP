@@ -62,7 +62,7 @@ int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
     int i = 0;
     int flag = 0;  // 默认未找到: 0
     for (i = 0; i < MAX_ARP_SIZE; i += 1) {
-		printf("entry ip: %x, valid: %d \n", arpcache.entries[i].ip4, arpcache.entries[i].valid);
+//		printf("entry ip: %x, valid: %d \n", arpcache.entries[i].ip4, arpcache.entries[i].valid);
         if(arpcache.entries[i].ip4 == ip4 && arpcache.entries[i].valid == 1) {  // 如果找到且有效
             flag = 1;                           // flag置为找到: 1
             memcpy(mac, arpcache.entries[i].mac, sizeof(u8) * ETH_ALEN);  // MAC地址赋值
@@ -155,7 +155,6 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
             arpcache.entries[i] = arpcache.entries[i - 1];
         }
         arpcache.entries[0] = *entry;
-        printf("entry ip: %x, valid: %d \n", arpcache.entries[0].ip4, arpcache.entries[0].valid);
     }
 
 	// 然后遍历缓存列表，如果有对应IP地址的待决包，将MAC地址填充好发送出去
@@ -167,12 +166,6 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
                 struct ether_header * eh = (struct ether_header *)(pkt->packet);
                 memcpy(eh->ether_dhost, mac, ETH_ALEN);
-                printf("\n\n");
-                printf("将待决包发出, src mac is %x, dst mac is  %x\n", eh->ether_shost[0], eh->ether_dhost[0]);
-                for(i = 0; i < pkt->len; i += 1) {
-                    printf("%x ", *(pkt->packet + i));
-                }
-                printf("\n\n");
                 iface_send_packet(req->iface, pkt->packet, pkt->len);
                 list_delete_entry(&pkt->list);                             // 从链表上删除
 			}
@@ -213,16 +206,15 @@ void *arpcache_sweep(void *arg)
             if(req->retries >= 5) {
                 pkt = NULL;
                 list_for_each_entry(pkt, &req->cached_packets, list) {       // 对每个包依次回复icmp
-//                    icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
+                    icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
                 }
                 list_delete_entry(&req->list);          // 删除该项
             } else {
                 time(&now);
                 if((long)now - (long)req->sent > 1) {  // 如果超时1s，重发arp请求，且重发次数+1，重发时间重置
-                    pkt = NULL;
                     req->retries += 1;
                     req->sent = now;
-//                    arp_send_request(req->iface, req->ip4);     // 针对ip4重发arp请求
+                    arp_send_request(req->iface, req->ip4);     // 针对ip4重发arp请求
                 }
             }
         }
