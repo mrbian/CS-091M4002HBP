@@ -16,7 +16,7 @@
 // 如果第一个参数是纯数据的话，应该有dst_ip参数，但是没有，所以第一个参数是别的包(⊙﹏⊙)b
 void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 {
-	fprintf(stderr, "TODO: malloc and send icmp packet.\n");
+//	fprintf(stderr, "TODO: malloc and send icmp packet.\n");
 	// 获取到ip目的地址
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(in_pkt);
 	struct icmphdr * pkt_icmp_hdr;

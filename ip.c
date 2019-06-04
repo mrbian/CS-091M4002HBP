@@ -31,7 +31,7 @@ void ip_init_hdr(struct iphdr *ip, u32 saddr, u32 daddr, u16 len, u8 proto)
 // the input address is in host byte order
 rt_entry_t *longest_prefix_match(u32 dst)
 {
-	fprintf(stderr, "TODO: longest prefix match for the packet.\n");
+//	fprintf(stderr, "TODO: longest prefix match for the packet.\n");
 	rt_entry_t * result = NULL;
 	int max_mask = 0;    // 最大子网掩码
 
@@ -55,5 +55,5 @@ rt_entry_t *longest_prefix_match(u32 dst)
 void ip_send_packet(char *packet, int len)
 {
 	fprintf(stderr, "TODO: send ip packet.\n");
-	
+
 }

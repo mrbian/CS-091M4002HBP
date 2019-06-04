@@ -55,7 +55,7 @@ void arpcache_destroy()
 // and mac address with the given arguments
 int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
 {
-	fprintf(stderr, "TODO: lookup ip address in arp cache.\n");
+//	fprintf(stderr, "TODO: lookup ip address in arp cache.\n");
     // 遍历ARP表，尝试找到ip4对应的mac地址
     // 若找到且结果有效，将mac数组各变量替换后返回1；
     // 若未找到，返回0；
@@ -82,7 +82,7 @@ int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
 // len是packet这个内容的长度
 void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 {
-	fprintf(stderr, "TODO: append the ip address if lookup failed, and send arp request if necessary.\n");
+//	fprintf(stderr, "TODO: append the ip address if lookup failed, and send arp request if necessary.\n");
     // （若IPv4地址对应MAC地址在本主机未找到）将包加入ARP缓存
     // 若缓存中已有对应IPv4地址的包，则将包插入对应链表；
     // 若缓存中没有，则创建链表；
@@ -131,7 +131,7 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 // them out
 void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 {
-	fprintf(stderr, "TODO: insert ip->mac entry, and send all the pending packets.\n");
+//	fprintf(stderr, "TODO: insert ip->mac entry, and send all the pending packets.\n");
 	// 查找是否已有ip4对应的条目，若有，则替换掉
 	int i = 0;
     int flag = 0;

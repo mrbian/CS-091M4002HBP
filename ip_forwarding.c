@@ -14,7 +14,7 @@
 // iface_send_packet_by_arp
 void ip_forward_packet(u32 ip_dst, char *packet, int len)
 {
-	fprintf(stderr, "TODO: forward ip packet.\n");
+//	fprintf(stderr, "TODO: forward ip packet.\n");
 	// check TTL
 	struct ether_header * eh = (struct ether_header *)packet;
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(packet);
@@ -47,7 +47,7 @@ void handle_ip_packet(iface_info_t *iface, char *packet, int len)
 	struct iphdr *ip = packet_to_ip_hdr(packet);
 	u32 daddr = ntohl(ip->daddr);
 	if (daddr == iface->ip) {
-		fprintf(stderr, "TODO: reply to the sender if it is ping packet.\n");
+//		fprintf(stderr, "TODO: reply to the sender if it is ping packet.\n");
 
 		icmp_send_packet(packet, len, 0, 0);
 		free(packet);
