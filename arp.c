@@ -45,6 +45,7 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
     memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
     ea->arp_tpa = htonl(dst_ip);
     // tha置空（00 00 00 00 00 00）
+    printf("arp request for target ip address: %x is sending \n", ea->arp_tpa);
 
     // 发送出去
     iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
