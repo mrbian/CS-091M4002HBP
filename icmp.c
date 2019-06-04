@@ -22,16 +22,15 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(in_pkt);
 	struct icmphdr * pkt_icmp_hdr;
 	pkt_ip_hdr->saddr = ntohl(pkt_ip_hdr->saddr);			// 不只是这里会用到，其他函数也会用到，因此要先进行字节序转换
-	pkt_ip_hdr->daddr = ntohl(pkt_ip_hdr->daddr);
 
-	rt_entry_t * rt = longest_prefix_match(pkt_ip_hdr->saddr);
+	rt_entry_t * rt = longest_prefix_match(ntohl(pkt_ip_hdr->saddr));
 	if(rt) {
 		// malloc an icmp packet
 		// ip header
 		size_t packet_length = ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr) + sizeof(struct iphdr);  // ICMP协议要将原包的IP的header添加到icmp header的后面，所以有两份ip header的空间
 		char * packet = (char *)malloc(packet_length);
 		struct iphdr * packet_iphdr = packet_to_ip_hdr(packet);
-		ip_init_hdr(packet_iphdr, rt->iface->ip, pkt_ip_hdr->saddr, sizeof(struct iphdr) + sizeof(struct icmphdr), 1);   // protocal IPPROTO_ICMP : 1
+		ip_init_hdr(packet_iphdr, rt->iface->ip, ntohl(pkt_ip_hdr->saddr), sizeof(struct iphdr) + sizeof(struct icmphdr), 1);   // protocal IPPROTO_ICMP : 1
 
 		// icmp header
 		struct icmphdr * packet_icmphdr = (struct icmphdr *)(packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4);
@@ -56,6 +55,6 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 		}
 
 		packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
-        iface_send_packet_by_arp(rt->iface, pkt_ip_hdr->saddr, packet, (int)packet_length);		// 发送
+        iface_send_packet_by_arp(rt->iface, ntohl(pkt_ip_hdr->saddr), packet, (int)packet_length);		// 发送
 	}
 }
