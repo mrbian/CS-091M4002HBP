@@ -30,7 +30,7 @@ void ip_forward_packet(u32 ip_dst, char *packet, int len)
 		pkt_ip_hdr->ttl -= 1;
 		pkt_ip_hdr->checksum = ip_checksum(pkt_ip_hdr);  // 最后设置checksum
 		printf("iface->ip %x \n", rt->iface->ip);
-		iface_send_packet_by_arp(rt->iface, rt->gw == 0 ? pkt_ip_hdr->daddr : rt->gw, packet, len);
+		iface_send_packet_by_arp(rt->iface, rt->gw == 0 ? ntohl(pkt_ip_hdr->daddr) : rt->gw, packet, len);
 	} else {
 		free(packet);
 		return;
