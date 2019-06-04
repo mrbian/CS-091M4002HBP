@@ -99,6 +99,7 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
     ea->arp_spa = ntohl(ea->arp_spa);
 
     if(ea->arp_op == ARPOP_REQUEST) {
+        printf("iface->ip is %x \n", iface->ip);
         if(ea->arp_spa == iface->ip) {              // 如果是本机发出的arp请求包，则直接忽略
             printf("是本机发出的arp请求包，丢弃");
             return;
