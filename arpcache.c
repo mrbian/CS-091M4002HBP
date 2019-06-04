@@ -139,6 +139,8 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 		if(arpcache.entries[i].ip4 == ip4) {
             flag = 1;
 			memcpy(arpcache.entries[i].mac, mac, ETH_ALEN);		// 覆盖原来的值
+            arpcache.entries[i].valid = 1;                      // valid置为1
+            time(&arpcache.entries[i].added);                   // 重置时间
 		}
 	}
 
@@ -196,6 +198,7 @@ void *arpcache_sweep(void *arg)
         for(i = 0; i < MAX_ARP_SIZE; i += 1) {
             time(&now);
             if((long)now - (long)arpcache.entries[i].added > 15) {
+                printf("已过15s : from %ld to %ld \n", (long)now, (long)arpcache.entries[i].added);
                 arpcache.entries[i].valid = 0;                          // valid为0即相当于删除
             }
         }
