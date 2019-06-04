@@ -123,7 +123,7 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
 // send (IP) packet through arpcache lookup 
 //
 // Lookup the mac address of dst_ip in arpcache. If it is found, fill the
-// ethernet header and emit the packet by iface_send_packet(arp_send_request), otherwise, pending
+// ethernet header and emit the packet by iface_send_packet, otherwise, pending
 // this packet into arpcache, and send arp request.
 void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *packet, int len)
 {

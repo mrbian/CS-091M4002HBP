@@ -14,7 +14,6 @@
 // const是告诉coder，这里不能free和修改
 // 为什么会有第一个参数？不是应该根据type、code、dst_ip直接发吗？
 // 如果第一个参数是纯数据的话，应该有dst_ip参数，但是没有，所以第一个参数是别的包(⊙﹏⊙)b
-// todo: 这里应该讲封装好的包由ip_send_packet发送
 void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 {
 	fprintf(stderr, "TODO: malloc and send icmp packet.\n");

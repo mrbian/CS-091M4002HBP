@@ -55,5 +55,5 @@ rt_entry_t *longest_prefix_match(u32 dst)
 void ip_send_packet(char *packet, int len)
 {
 	fprintf(stderr, "TODO: send ip packet.\n");
-
+	
 }
