@@ -35,7 +35,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 		struct icmphdr * packet_icmphdr = (struct icmphdr *)(packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4);
 		packet_icmphdr->code = code;
 		packet_icmphdr->type = type;
-		memcpy(packet_icmphdr + sizeof(struct icmphdr), pkt_ip_hdr, sizeof(struct iphdr));								// 将原包头填充到icmp的数据域内
+//		memcpy(packet_icmphdr + sizeof(struct icmphdr), pkt_ip_hdr, sizeof(struct iphdr));								// 将原包头填充到icmp的数据域内
 
 		// 判断类型对数据域进行分类处理
 		switch(type) {
