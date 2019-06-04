@@ -26,7 +26,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 	if(rt) {
 		// malloc an icmp packet
 		// ip header
-		size_t packet_length = ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr) + sizeof(struct iphdr);  // ICMP协议要将原包的IP的header添加到icmp header的后面，所以有两份ip header的空间
+		size_t packet_length = ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr);  // todo: ICMP协议要将原包的IP的header添加到icmp header的后面，所以有两份ip header的空间
 		char * packet = (char *)malloc(packet_length);
 		struct iphdr * packet_iphdr = packet_to_ip_hdr(packet);
 		ip_init_hdr(packet_iphdr, rt->iface->ip, ntohl(pkt_ip_hdr->saddr), sizeof(struct iphdr) + sizeof(struct icmphdr), 1);   // protocal IPPROTO_ICMP : 1
