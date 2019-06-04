@@ -1,6 +1,0 @@
-PWD /Users/macbook/Desktop/静态路由转发实验/2-router/zju-report-latex-template-master
-INPUT /usr/local/texlive/2019/texmf.cnf
-INPUT /usr/local/texlive/2019/texmf-dist/web2c/texmf.cnf
-INPUT /usr/local/texlive/2019/texmf-var/web2c/xetex/xelatex.fmt
-INPUT report.tex
-OUTPUT report.log
