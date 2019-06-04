@@ -49,6 +49,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				packet_icmphdr->icmp_sequence = pkt_icmp_hdr->icmp_sequence;
 				printf("data len is %d \n", (int)(len - ETHER_HDR_SIZE - pkt_ip_hdr->ihl * 4 - sizeof(struct icmphdr)));
 				memcpy(packet_icmphdr + sizeof(struct icmphdr), pkt_icmp_hdr + sizeof(struct icmphdr), len - ETHER_HDR_SIZE - pkt_ip_hdr->ihl * 4 - sizeof(struct icmphdr));	// 需要request包的所有数据
+				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
 				break;
 			case 3:						// 目的不可达
 				// malloc an icmp packet
@@ -64,6 +65,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				packet_icmphdr->type = type;
 
 				memcpy(packet_icmphdr + sizeof(struct icmphdr), pkt_ip_hdr, sizeof(struct iphdr));								// 需要原包的ip header和64bit的数据
+				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
 				break;
 			case 8:						// icmp请求
 				// todo
@@ -82,13 +84,13 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				packet_icmphdr->type = type;
 
 				memcpy(packet_icmphdr + sizeof(struct icmphdr), pkt_ip_hdr, sizeof(struct iphdr));								// 需要原包的ip header和64bit的数据
+				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
 				break;
 			default:
 				printf("unknown icmp type! \n");
 				return;
 		}
 
-		packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
         iface_send_packet_by_arp(rt->iface, ntohl(pkt_ip_hdr->saddr), packet, (int)packet_length);		// 发送
 	}
 }
