@@ -20,7 +20,9 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 	fprintf(stderr, "TODO: send arp request when lookup failed in arpcache.\n");
     // 包装好一个arp请求包，并且把它发出去（注意要把以太网首部也带上）
     char *packet = (char *)malloc(sizeof(struct ether_header) + sizeof(struct ether_arp));
+    printf("???\n");
     bzero(packet, sizeof(struct ether_header) + sizeof(struct ether_arp));
+    printf("U?\n");
 
     struct ether_header *eh = (struct ether_header *)packet;
     struct ether_arp *ea = packet_to_arp_hdr(packet);
