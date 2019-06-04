@@ -35,6 +35,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				// malloc an icmp packet
 				// ip header
 				packet_length = (size_t)len;  // ICMP协议要将原包的IP的header添加到icmp header的后面，所以有两份ip header的空间
+				printf("len is %d \n", len);
 				packet = (char *)malloc(packet_length);
 				packet_iphdr = packet_to_ip_hdr(packet);
 				ip_init_hdr(packet_iphdr, rt->iface->ip, ntohl(pkt_ip_hdr->saddr), (u16)(packet_length - sizeof(struct ether_header)), 1);   // protocal IPPROTO_ICMP : 1
