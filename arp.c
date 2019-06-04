@@ -76,7 +76,7 @@ void arp_send_reply(iface_info_t *iface, struct ether_arp *req_hdr)
     ea->arp_op = htons(ARPOP_REPLY);
 
     ea->arp_tpa = htonl(req_hdr->arp_spa);
-    memcpy(ea->arp_tha, req_hdr->arp_spa, ETH_ALEN);
+    memcpy(ea->arp_tha, req_hdr->arp_sha, ETH_ALEN);
 
     // 先看是否是查询本机的ip地址，若是，则直接填充好发出
     if(ea->arp_tpa == iface->ip) {
@@ -84,9 +84,7 @@ void arp_send_reply(iface_info_t *iface, struct ether_arp *req_hdr)
         memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
         iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
     } else {                                            // 若不是，则查询
-        printf(" (⊙﹏⊙)b \n");
         int found = arpcache_lookup(req_hdr->arp_tpa, req_hdr->arp_tha);
-        printf(" = - = \n");
         if(found) {
             iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
         } else {
