@@ -152,7 +152,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 		if(req->ip4 == ip4) {
 			pkt = NULL;
 			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
-				iface_send_packet_by_arp(req->iface, req->ip4, pkt->packet, pkt->len);
+
 			}
 		}
 	}
@@ -191,7 +191,7 @@ void *arpcache_sweep(void *arg)
             if(req->retries >= 5) {
                 pkt = NULL;
                 list_for_each_entry(pkt, &req->cached_packets, list) {       // 对每个包依次回复icmp
-                    icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
+//                    icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
                 }
                 list_delete_entry(&req->list);          // 删除该项
             } else {
@@ -200,7 +200,7 @@ void *arpcache_sweep(void *arg)
                     pkt = NULL;
                     req->retries += 1;
                     req->sent = now;
-                    arp_send_request(req->iface, req->ip4);     // 针对ip4重发arp请求
+//                    arp_send_request(req->iface, req->ip4);     // 针对ip4重发arp请求
                 }
             }
         }

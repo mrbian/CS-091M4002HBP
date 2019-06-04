@@ -40,7 +40,6 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 		packet_icmphdr->type = type;
 		packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
 
-		// send
-		iface_send_packet_by_arp(rt->iface, pkt_ip_hdr->daddr, packet, (int)packet_length);
+		// 发送，这里不能用iface_send_packet_by_arp
 	}
 }
