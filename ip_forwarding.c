@@ -18,9 +18,7 @@ void ip_forward_packet(u32 ip_dst, char *packet, int len)
 	// check TTL
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(packet);
 	printf("this packet's ttl is %x \n", pkt_ip_hdr->ttl);
-	pkt_ip_hdr->ttl -= 1;									// 收到包后，先进行-1，再进行判断(当一台路由器由到一个TTL值为1的数据包，会直接丢弃)
-	pkt_ip_hdr->checksum = ip_checksum(pkt_ip_hdr);  		// 最后设置checksum
-	if(pkt_ip_hdr->ttl <= 0) {
+	if(pkt_ip_hdr->ttl - 1 <= 0) {							// (当一台路由器由到一个TTL值为1的数据包，会直接丢弃)
 		icmp_send_packet(packet, len, 11, 0);
 		free(packet);
 		return;
@@ -30,6 +28,8 @@ void ip_forward_packet(u32 ip_dst, char *packet, int len)
 	rt_entry_t * rt = longest_prefix_match(ip_dst);
 	if(rt) {
 //		printf("iface->ip %x \n", rt->iface->ip);
+		pkt_ip_hdr->ttl -= 1;									// 进行-1
+		pkt_ip_hdr->checksum = ip_checksum(pkt_ip_hdr);  		// 最后设置checksum
 		iface_send_packet_by_arp(rt->iface, rt->gw == 0 ? ntohl(pkt_ip_hdr->daddr) : rt->gw, packet, len);
 	} else {
 		icmp_send_packet(packet, len, 3, 0);		// 返回ICMP Destination Net Unreachable
