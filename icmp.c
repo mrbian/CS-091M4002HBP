@@ -69,7 +69,6 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				break;
 			case 8:						// icmp请求
 				// todo
-				printf("???? \n");
 				break;
 			case 11:				// 超时
 				// malloc an icmp packet
