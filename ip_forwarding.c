@@ -29,9 +29,7 @@ void ip_forward_packet(u32 ip_dst, char *packet, int len)
 		// update checksum and ttl
 		pkt_ip_hdr->ttl -= 1;
 		pkt_ip_hdr->checksum = ip_checksum(pkt_ip_hdr);  // 最后设置checksum
-
-		// send to next hop
-		iface_send_packet_by_arp(rt->iface, rt->gw, packet, len);
+		iface_send_packet_by_arp(rt->iface, rt->gw == 0 ? rt->dest : rt->gw, packet, len);
 	} else {
 		free(packet);
 		return;
