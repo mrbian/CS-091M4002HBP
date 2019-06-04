@@ -46,6 +46,9 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				break;
 			case 3:
 				break;
+			case 11:
+
+				break;
 			default:
 				printf("unknown icmp type! \n");
 				break;
