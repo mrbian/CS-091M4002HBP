@@ -169,6 +169,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
                 iface_send_packet(req->iface, pkt->packet, pkt->len);
                 list_delete_entry(&pkt->list);                             // 从链表上删除
 			}
+            list_delete_entry(&req->list);                                  // 删除此类待决包
 		}
 	}
 }
