@@ -165,9 +165,9 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 		if(req->ip4 == ip4) {
 			pkt = NULL;
 			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
-                printf("将待决包发出 \n");
                 struct ether_header * eh = (struct ether_header *)(pkt->packet);
                 memcpy(eh->ether_dhost, mac, ETH_ALEN);
+                printf("将待决包发出, src mac is %x, dst mac is  %x\n", eh->ether_shost[0], eh->ether_dhost[0]);
                 iface_send_packet(req->iface, pkt->packet, pkt->len);
                 list_delete_entry(&pkt->list);                             // 从链表上删除
 			}
