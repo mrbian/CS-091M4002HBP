@@ -103,18 +103,11 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
     ea->arp_tpa = ntohl(ea->arp_tpa);
     ea->arp_spa = ntohl(ea->arp_spa);
 
-    printf("iface->ip is %x \n", iface->ip);
-    printf("ea->spa is %x \n", ea->arp_spa);
-    printf("ea->tpa is %x \n", ea->arp_tpa);
-
     arpcache_insert(ea->arp_spa, ea->arp_sha);              // 无论是arp请求还是arp回复，都要将源放入ARP表
 
     if(ea->arp_op == ARPOP_REQUEST) {
-        printf("This is an arp request packet \n ");
         // 给予arp回复
         arp_send_reply(iface, ea);
-    } else if(ea->arp_op == ARPOP_REPLY){
-        printf("This is an arp reply packet \n ");
     }
 
     free(packet);               // 这里不断收包，要清理内存
@@ -133,7 +126,6 @@ void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *packet, int
 
 	u8 dst_mac[ETH_ALEN];
 	int found = arpcache_lookup(dst_ip, dst_mac);
-    printf("dst ip: %x \n", dst_ip);
 	if (found) {
         memcpy(eh->ether_dhost, dst_mac, ETH_ALEN);
         iface_send_packet(iface, packet, len);
