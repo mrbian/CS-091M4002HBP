@@ -19,6 +19,8 @@ void ip_forward_packet(u32 ip_dst, char *packet, int len)
 	struct ether_header * eh = (struct ether_header *)packet;
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(packet);
 	if(pkt_ip_hdr->ttl <= 0) {
+		// todo: send type = 11 ttl exceed
+		icmp_send_packet(packet, len, 11, 0);
 		free(packet);
 		return;
 	}
