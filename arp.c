@@ -123,7 +123,7 @@ void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *packet, int
 	struct ether_header *eh = (struct ether_header *)packet;        // 可以直接强制转换
 	memcpy(eh->ether_shost, iface->mac, ETH_ALEN);
 	eh->ether_type = htons(ETH_P_IP);
-    printf("fuck? \n");
+
 	u8 dst_mac[ETH_ALEN];
 	int found = arpcache_lookup(dst_ip, dst_mac);
 	if (found) {

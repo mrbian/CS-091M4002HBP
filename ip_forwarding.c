@@ -51,7 +51,7 @@ void handle_ip_packet(iface_info_t *iface, char *packet, int len)
 //		fprintf(stderr, "TODO: reply to the sender if it is ping packet.\n");
 
 		icmp_send_packet(packet, len, 0, 0);
-		free(packet);
+//		free(packet);
 	}
 	else {
 		ip_forward_packet(daddr, packet, len);
