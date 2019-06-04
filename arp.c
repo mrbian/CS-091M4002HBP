@@ -90,7 +90,7 @@ void arp_send_reply(iface_info_t *iface, struct ether_arp *req_hdr)
 
 void handle_arp_packet(iface_info_t *iface, char *packet, int len)
 {
-	fprintf(stderr, "TODO: process arp packet: arp request & arp reply.\n");
+	fprintf(stderr, "\n\nTODO: process arp packet: arp request & arp reply.\n");
     struct ether_arp * ea = packet_to_arp_hdr(packet);
 
     // 进行字节序转换
@@ -99,6 +99,7 @@ void handle_arp_packet(iface_info_t *iface, char *packet, int len)
     ea->arp_spa = ntohl(ea->arp_spa);
 
     printf("iface->ip is %x \n", iface->ip);
+    printf("ea->spa is %x \n", ea->arp_spa);
 
     if(ea->arp_op == ARPOP_REQUEST) {
         if(ea->arp_spa == iface->ip) {              // 如果是本机发出的arp请求包，则直接忽略
