@@ -71,13 +71,13 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				memcpy(
                         packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4 + sizeof(struct icmphdr),
                         in_pkt + ETHER_HDR_SIZE,
-                        sizeof(struct iphdr)
-                );								// 需要原包的ip header和64bit的数据
+                        sizeof(struct iphdr) + 8
+                );								// 需要原包的ip header和64bit的原IP包数据
 				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, (int)packet_length - ETHER_HDR_SIZE - sizeof(struct iphdr));		// 要在最后面设置checksum
 				break;
 			case 8:						// icmp请求
 				// todo
-				printf("type 为8的请求 ?? \n");
+				printf("this packet icmp type is 8, todo \n");
 				break;
 			case 11:				// 超时
 				// malloc an icmp packet
@@ -92,11 +92,11 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				packet_icmphdr->code = code;
 				packet_icmphdr->type = type;
 
-                // 需要原包的ip header和64bit的数据
+                // 需要原包的ip header和64bit的原IP包数据
 				memcpy(
                         packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4 + sizeof(struct icmphdr),
                         in_pkt + ETHER_HDR_SIZE,
-                        sizeof(struct iphdr)
+                        sizeof(struct iphdr) + 8
                 );
 				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, (int)packet_length - ETHER_HDR_SIZE - sizeof(struct iphdr));		// 要在最后面设置checksum
 				break;
