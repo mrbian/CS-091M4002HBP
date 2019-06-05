@@ -166,9 +166,9 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
                 struct ether_header * eh = (struct ether_header *)(pkt->packet);
                 memcpy(eh->ether_dhost, mac, ETH_ALEN);
                 iface_send_packet(req->iface, pkt->packet, pkt->len);
-                list_delete_entry(&pkt->list);                             // 从链表上删除
+                list_delete_entry(&(pkt->list));                             // 从链表上删除
 			}
-            list_delete_entry(&req->list);                                  // 删除此类待决包
+            list_delete_entry(&(req->list));                                  // 删除此类待决包
 		}
 	}
 }
@@ -205,9 +205,9 @@ void *arpcache_sweep(void *arg)
                 list_for_each_entry(pkt, &req->cached_packets, list) {       // 对每个包依次回复icmp
                     printf("arp request failed, send icmp packet\n");
                     icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
-                    list_delete_entry(&pkt->list);
+                    list_delete_entry(&(pkt->list));
                 }
-                list_delete_entry(&req->list);          // 删除该项
+                list_delete_entry(&(req->list));          // 删除该项
             } else {
                 time(&now);
                 if((long)now - (long)req->sent > 1) {  // 如果超时1s，重发arp请求，且重发次数+1，重发时间重置
