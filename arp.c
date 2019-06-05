@@ -17,7 +17,6 @@
 // 一个变量只要超过了一字节，发送前要转换大小端字节序
 void arp_send_request(iface_info_t *iface, u32 dst_ip)
 {
-//	fprintf(stderr, "TODO: send arp request when lookup failed in arpcache.\n");
     // 包装好一个arp请求包，并且把它发出去（注意要把以太网首部也带上）
     char *packet = (char *)malloc(sizeof(struct ether_header) + sizeof(struct ether_arp));
     bzero(packet, sizeof(struct ether_header) + sizeof(struct ether_arp));
@@ -55,7 +54,6 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
 // through iface_send_packet
 void arp_send_reply(iface_info_t *iface, struct ether_arp *req_hdr)
 {
-//	fprintf(stderr, "TODO: send arp reply when receiving arp request.\n");
     // 根据arp请求内容包装好一个arp回复包，并把它发送出去
     // 应答时，新包的源ip和源mac里就是查询结果
     char *packet = (char *)malloc(sizeof(struct ether_header) + sizeof(struct ether_arp));

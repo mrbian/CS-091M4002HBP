@@ -14,7 +14,6 @@
 // iface_send_packet_by_arp
 void ip_forward_packet(u32 ip_dst, char *packet, int len)
 {
-//	fprintf(stderr, "TODO: forward ip packet.\n");
 	// check TTL
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(packet);
 	printf("this packet's ttl is %x \n", pkt_ip_hdr->ttl);
@@ -27,7 +26,6 @@ void ip_forward_packet(u32 ip_dst, char *packet, int len)
 	// forward packet
 	rt_entry_t * rt = longest_prefix_match(ip_dst);
 	if(rt) {
-//		printf("iface->ip %x \n", rt->iface->ip);
 		pkt_ip_hdr->ttl -= 1;									// 进行-1
 		pkt_ip_hdr->checksum = ip_checksum(pkt_ip_hdr);  		// 最后设置checksum
 		iface_send_packet_by_arp(rt->iface, rt->gw == 0 ? ntohl(pkt_ip_hdr->daddr) : rt->gw, packet, len);
@@ -48,8 +46,6 @@ void handle_ip_packet(iface_info_t *iface, char *packet, int len)
 	struct iphdr *ip = packet_to_ip_hdr(packet);
 	u32 daddr = ntohl(ip->daddr);
 	if (daddr == iface->ip) {
-//		fprintf(stderr, "TODO: reply to the sender if it is ping packet.\n");
-
 		icmp_send_packet(packet, len, 0, 0);
 		free(packet);
 	}

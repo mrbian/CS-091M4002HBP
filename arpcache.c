@@ -55,7 +55,6 @@ void arpcache_destroy()
 // and mac address with the given arguments
 int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
 {
-//	fprintf(stderr, "TODO: lookup ip address in arp cache.\n");
     // 遍历ARP表，尝试找到ip4对应的mac地址
     // 若找到且结果有效，将mac数组各变量替换后返回1；
     // 若未找到，返回0；
@@ -82,7 +81,6 @@ int arpcache_lookup(u32 ip4, u8 mac[ETH_ALEN])
 // len是packet这个内容的长度
 void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 {
-//	fprintf(stderr, "TODO: append the ip address if lookup failed, and send arp request if necessary.\n");
     // （若IPv4地址对应MAC地址在本主机未找到）将包加入ARP缓存
     // 若缓存中已有对应IPv4地址的包，则将包插入对应链表；
     // 若缓存中没有，则创建链表；
@@ -131,7 +129,6 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 // them out
 void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 {
-//	fprintf(stderr, "TODO: insert ip->mac entry, and send all the pending packets.\n");
 	// 查找是否已有ip4对应的条目，若有，则替换掉
 	int i = 0;
     int flag = 0;
@@ -193,7 +190,6 @@ void *arpcache_sweep(void *arg)
     time_t now;
 	while (1) {
 		sleep(1);
-//		fprintf(stderr, "TODO: sweep arpcache periodically: remove old entries, resend arp requests .\n");
         // 遍历arp缓存，删除超过15s的旧条目
         for(i = 0; i < MAX_ARP_SIZE; i += 1) {
             time(&now);
@@ -209,12 +205,14 @@ void *arpcache_sweep(void *arg)
             if(req->retries >= 5) {
                 pkt = NULL;
                 list_for_each_entry(pkt, &req->cached_packets, list) {       // 对每个包依次回复icmp
+                    printf("arp request failed, send icmp packet\n");
                     icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
                 }
                 list_delete_entry(&req->list);          // 删除该项
             } else {
                 time(&now);
                 if((long)now - (long)req->sent > 1) {  // 如果超时1s，重发arp请求，且重发次数+1，重发时间重置
+                    printf("arp request retry one time\n");
                     req->retries += 1;
                     req->sent = now;
                     arp_send_request(req->iface, req->ip4);     // 针对ip4重发arp请求

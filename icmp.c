@@ -16,7 +16,6 @@
 // const是告诉coder，这里不能free和修改
 void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 {
-//	fprintf(stderr, "TODO: malloc and send icmp packet.\n");
 	// 获取到ip目的地址
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(in_pkt);
 	struct icmphdr * pkt_icmp_hdr = (struct icmphdr *)(in_pkt + ETHER_HDR_SIZE + pkt_ip_hdr->ihl * 4);
@@ -78,6 +77,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				break;
 			case 8:						// icmp请求
 				// todo
+				printf("type 为8的请求 ?? \n");
 				break;
 			case 11:				// 超时
 				// malloc an icmp packet
