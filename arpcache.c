@@ -200,7 +200,6 @@ void *arpcache_sweep(void *arg)
         struct arp_req *req = NULL;
         struct cached_pkt *pkt = NULL;
         list_for_each_entry(req, &arpcache.req_list, list) {
-            printf("hello");
             if(req->retries >= 5) {
                 pkt = NULL;
                 list_for_each_entry(pkt, &req->cached_packets, list) {       // 对每个包依次回复icmp
