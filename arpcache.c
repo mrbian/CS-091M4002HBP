@@ -157,13 +157,13 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
     }
 
 	// 然后遍历缓存列表，如果有对应IP地址的待决包，将MAC地址填充好发送出去
-	struct arp_req *req = NULL;
-	struct cached_pkt *pkt = NULL;
-	list_for_each_entry(req, &(arpcache.req_list), list) {
+	struct arp_req *req = NULL, *req_q;
+	struct cached_pkt *pkt = NULL, *pkt_q;
+	list_for_each_entry_safe(req, req_q, &(arpcache.req_list), list) {
 		if(req->ip4 == ip4) {
             printf("cache insert will send packet\n");
 			pkt = NULL;
-			list_for_each_entry(pkt, &(req->cached_packets), list) {   // 填充好MAC地址然后依次发送出去
+			list_for_each_entry_safe(pkt, pkt_q, &(req->cached_packets), list) {   // 填充好MAC地址然后依次发送出去
                 struct ether_header * eh = (struct ether_header *)(pkt->packet);
                 memcpy(eh->ether_dhost, mac, ETH_ALEN);
                 iface_send_packet(req->iface, pkt->packet, pkt->len);
@@ -200,13 +200,13 @@ void *arpcache_sweep(void *arg)
         }
 
         // 遍历待决包，如果等待时间超过1s，重发，如果重发次数超过5次，针对此包发送icmp包，并且删除掉此包
-        struct arp_req *req = NULL;
-        struct cached_pkt *pkt = NULL;
-        list_for_each_entry(req, &(arpcache.req_list), list) {
+        struct arp_req *req = NULL, *req_q;
+        struct cached_pkt *pkt = NULL, *pkt_q;
+        list_for_each_entry_safe(req, req_q, &(arpcache.req_list), list) {
             printf("cache sweep will send packet\n");
             if(req->retries >= 5) {
                 pkt = NULL;
-                list_for_each_entry(pkt, &(req->cached_packets), list) {       // 对每个包依次回复icmp
+                list_for_each_entry_safe(pkt, pkt_q, &(req->cached_packets), list) {       // 对每个包依次回复icmp
                     printf("arp request failed, send icmp packet\n");
                     icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
                     list_delete_entry(&(pkt->list));
@@ -227,18 +227,4 @@ void *arpcache_sweep(void *arg)
 	}
 
 	return NULL;
-}
-
-
-// 遍历并打印所有的缓存包
-void print_arp_cache_list() {
-	printf("print all cached packet \n");
-	struct arp_req *req = NULL;
-	struct cached_pkt *pkt = NULL;
-	list_for_each_entry(req, &arpcache.req_list, list) {
-        pkt = NULL;
-        list_for_each_entry(pkt, &req->cached_packets, list) {
-			// print packet here
-        }
-	}
 }
