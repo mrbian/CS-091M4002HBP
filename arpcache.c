@@ -161,6 +161,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 	struct cached_pkt *pkt = NULL;
 	list_for_each_entry(req, &(arpcache.req_list), list) {
 		if(req->ip4 == ip4) {
+            printf("cache insert will send packet\n");
 			pkt = NULL;
 			list_for_each_entry(pkt, &(req->cached_packets), list) {   // 填充好MAC地址然后依次发送出去
                 struct ether_header * eh = (struct ether_header *)(pkt->packet);
@@ -202,14 +203,17 @@ void *arpcache_sweep(void *arg)
         struct arp_req *req = NULL;
         struct cached_pkt *pkt = NULL;
         list_for_each_entry(req, &(arpcache.req_list), list) {
+            printf("cache sweep will send packet\n");
             if(req->retries >= 5) {
                 pkt = NULL;
                 list_for_each_entry(pkt, &(req->cached_packets), list) {       // 对每个包依次回复icmp
                     printf("arp request failed, send icmp packet\n");
                     icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
                     list_delete_entry(&(pkt->list));
+                    free(pkt);
                 }
                 list_delete_entry(&(req->list));          // 删除该项
+                free(req);
             } else {
                 time(&now);
                 if((long)now - (long)req->sent > 1) {  // 如果超时1s，重发arp请求，且重发次数+1，重发时间重置
