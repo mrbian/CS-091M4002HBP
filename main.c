@@ -266,7 +266,7 @@ void ustack_run()
 
 int main(int argc, const char **argv)
 {
-	printf("-----------custom icmp and arp-----------\n");
+	printf("-----------custom icmp and arp-----------\n\n");
 
 	if (getuid() && geteuid()) {
 		printf("Permission denied, should be superuser!\n");
