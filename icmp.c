@@ -35,7 +35,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				packet_length = (size_t)len;  // ICMP协议要将原包的IP的header添加到icmp header的后面，所以有两份ip header的空间
 				packet = (char *)malloc(packet_length);
 				packet_iphdr = packet_to_ip_hdr(packet);
-				ip_init_hdr(packet_iphdr, rt->iface->ip, ntohl(pkt_ip_hdr->saddr), (u16)(packet_length - sizeof(struct ether_header)), 1);   // protocal IPPROTO_ICMP : 1
+				ip_init_hdr(packet_iphdr, rt->iface->ip, ntohl(pkt_ip_hdr->saddr), (u16)(sizeof(struct iphdr)), 1);   // protocal IPPROTO_ICMP : 1
 
 				// icmp header
 				packet_icmphdr = (struct icmphdr *)(packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4);
@@ -52,7 +52,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
                 );
 
                 // 设置checksum
-                packet_icmphdr->checksum = htons(icmp_checksum(packet_icmphdr, sizeof(struct icmphdr)));
+                packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));           // checksum不需要进行字节序转换
 				break;
 			case 3:						// 目的不可达
 				// malloc an icmp packet
