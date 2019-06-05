@@ -35,7 +35,6 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				// malloc an icmp packet
 				// ip header
 				packet_length = (size_t)len;  // ICMP协议要将原包的IP的header添加到icmp header的后面，所以有两份ip header的空间
-				printf("total len is %d \n", len);
 				packet = (char *)malloc(packet_length);
 				packet_iphdr = packet_to_ip_hdr(packet);
 				ip_init_hdr(packet_iphdr, rt->iface->ip, ntohl(pkt_ip_hdr->saddr), (u16)(packet_length - sizeof(struct ether_header)), 1);   // protocal IPPROTO_ICMP : 1
@@ -44,12 +43,14 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				packet_icmphdr = (struct icmphdr *)(packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4);
 				packet_icmphdr->code = code;
 				packet_icmphdr->type = type;
-
 				packet_icmphdr->icmp_identifier = pkt_icmp_hdr->icmp_identifier;
 				packet_icmphdr->icmp_sequence = pkt_icmp_hdr->icmp_sequence;
-				printf("data len is %d \n", (int)(len - ETHER_HDR_SIZE - pkt_ip_hdr->ihl * 4 - sizeof(struct icmphdr)));
-				memcpy(packet_icmphdr + sizeof(struct icmphdr), pkt_icmp_hdr + sizeof(struct icmphdr), len - ETHER_HDR_SIZE - pkt_ip_hdr->ihl * 4 - sizeof(struct icmphdr));	// 需要request包的所有数据
-				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, len - ETHER_HDR_SIZE - pkt_ip_hdr->ihl * 4);		// 要在最后面设置checksum
+
+                // 需要request包的所有数据，这里必须是以packet为起始地址，因为packet是char型指针，移动一个单位是一字节
+				memcpy(packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4 + sizeof(struct icmphdr), pkt_icmp_hdr + sizeof(struct icmphdr), len - ETHER_HDR_SIZE - pkt_ip_hdr->ihl * 4 - sizeof(struct icmphdr));
+
+                // 要在最后面设置checksum，这里的checksum的计算包括后面的icmp头部里的数据域
+				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, len - ETHER_HDR_SIZE - pkt_ip_hdr->ihl * 4 - sizeof(struct icmphdr));
 				break;
 			case 3:						// 目的不可达
 				// malloc an icmp packet
@@ -64,7 +65,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				packet_icmphdr->code = code;
 				packet_icmphdr->type = type;
 
-				memcpy(packet_icmphdr + sizeof(struct icmphdr), pkt_ip_hdr, sizeof(struct iphdr));								// 需要原包的ip header和64bit的数据
+				memcpy(packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4 + sizeof(struct icmphdr), pkt_ip_hdr, sizeof(struct iphdr));								// 需要原包的ip header和64bit的数据
 				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
 				break;
 			case 8:						// icmp请求
@@ -83,7 +84,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				packet_icmphdr->code = code;
 				packet_icmphdr->type = type;
 
-				memcpy(packet_icmphdr + sizeof(struct icmphdr), pkt_ip_hdr, sizeof(struct iphdr));								// 需要原包的ip header和64bit的数据
+				memcpy(packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4 + sizeof(struct icmphdr), pkt_ip_hdr, sizeof(struct iphdr));								// 需要原包的ip header和64bit的数据
 				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
 				break;
 			default:
