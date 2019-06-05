@@ -58,7 +58,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 			case 3:						// 目的不可达
 				// malloc an icmp packet
 				// ip header
-				packet_length = (size_t)(ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr) + sizeof(struct iphdr));
+				packet_length = (size_t)(ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr) + sizeof(struct iphdr) + 8);
 				packet = (char *)malloc(packet_length);
 				packet_iphdr = packet_to_ip_hdr(packet);
 				ip_init_hdr(packet_iphdr, rt->iface->ip, ntohl(pkt_ip_hdr->saddr), (u16)(packet_length - sizeof(struct ether_header)), 1);   // protocal IPPROTO_ICMP : 1
@@ -82,7 +82,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 			case 11:				// 超时
 				// malloc an icmp packet
 				// ip header
-				packet_length = (size_t)(ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr) + sizeof(struct iphdr));
+				packet_length = (size_t)(ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr) + sizeof(struct iphdr) + 8);
 				packet = (char *)malloc(packet_length);
 				packet_iphdr = packet_to_ip_hdr(packet);
 				ip_init_hdr(packet_iphdr, rt->iface->ip, ntohl(pkt_ip_hdr->saddr), (u16)(packet_length - sizeof(struct ether_header)), 1);   // protocal IPPROTO_ICMP : 1
