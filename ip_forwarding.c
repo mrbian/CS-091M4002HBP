@@ -16,7 +16,7 @@ void ip_forward_packet(u32 ip_dst, char *packet, int len)
 {
 	// check TTL
 	struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(packet);
-	printf("this packet's ttl is %x \n", pkt_ip_hdr->ttl);
+	//	printf("this packet's ttl is %x \n", pkt_ip_hdr->ttl);
 	if(pkt_ip_hdr->ttl - 1 <= 0) {							// (当一台路由器由到一个TTL值为1的数据包，会直接丢弃)
 		icmp_send_packet(packet, len, 11, 0);
 		free(packet);
