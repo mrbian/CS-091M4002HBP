@@ -52,7 +52,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
                 );
 
                 // 要在最后面设置checksum，这里的checksum的计算包括后面的icmp头部里的数据域
-				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, len - ETHER_HDR_SIZE - pkt_ip_hdr->ihl * 4 - sizeof(struct icmphdr));
+				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));
 				break;
 			case 3:						// 目的不可达
 				// malloc an icmp packet
