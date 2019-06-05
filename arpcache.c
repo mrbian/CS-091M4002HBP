@@ -202,7 +202,6 @@ void *arpcache_sweep(void *arg)
         struct cached_pkt *pkt = NULL;
         list_for_each_entry(req, &arpcache.req_list, list) {
             if(req->retries >= 5) {
-                printf("??? \n");
                 pkt = NULL;
                 list_for_each_entry(pkt, &req->cached_packets, list) {       // 对每个包依次回复icmp
                     printf("arp request failed, send icmp packet\n");
@@ -210,7 +209,6 @@ void *arpcache_sweep(void *arg)
                 }
                 list_delete_entry(&req->list);          // 删除该项
             } else {
-                printf("= - = \n");
                 time(&now);
                 if((long)now - (long)req->sent > 1) {  // 如果超时1s，重发arp请求，且重发次数+1，重发时间重置
                     printf("arp request retry one more time\n");
