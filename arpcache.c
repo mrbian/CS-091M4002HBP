@@ -108,6 +108,7 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
 		new_req->ip4 = ip4;
 		new_req->retries = 0;
 		new_req->iface = iface;
+        time(&new_req->sent);
 		init_list_head(&new_req->cached_packets);                                       // 初始化包节点
         init_list_head(&new_req->list);													// 将缓存对象串上去
         list_add_tail(&new_req->list, &arpcache.req_list);
