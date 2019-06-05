@@ -88,7 +88,7 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
     int flag = 0; // 默认未找到
     // 遍历ARP缓存链表中的第一层链表
     struct arp_req *ele = NULL;
-    list_for_each_entry(ele, &arpcache.req_list, list) {            // 注意这里是&arpcache.req_list而不是arpcache.req_list，因为宏定义里面用的是->操作符，所以必须传入结构体指针，而不是结构体变量
+    list_for_each_entry(ele, &(arpcache.req_list), list) {            // 注意这里是&arpcache.req_list而不是arpcache.req_list，因为宏定义里面用的是->操作符，所以必须传入结构体指针，而不是结构体变量
         if (ele->ip4 == ip4) {  // 若找到
             flag = 1;
             struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
@@ -159,16 +159,19 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 	// 然后遍历缓存列表，如果有对应IP地址的待决包，将MAC地址填充好发送出去
 	struct arp_req *req = NULL;
 	struct cached_pkt *pkt = NULL;
-	list_for_each_entry(req, &arpcache.req_list, list) {
+	list_for_each_entry(req, &(arpcache.req_list), list) {
 		if(req->ip4 == ip4) {
 			pkt = NULL;
-			list_for_each_entry(pkt, &req->cached_packets, list) {   // 填充好MAC地址然后依次发送出去
+			list_for_each_entry(pkt, &(req->cached_packets), list) {   // 填充好MAC地址然后依次发送出去
                 struct ether_header * eh = (struct ether_header *)(pkt->packet);
                 memcpy(eh->ether_dhost, mac, ETH_ALEN);
                 iface_send_packet(req->iface, pkt->packet, pkt->len);
                 list_delete_entry(&(pkt->list));                             // 从链表上删除
+                free(pkt->packet);
+                free(pkt);
 			}
             list_delete_entry(&(req->list));                                  // 删除此类待决包
+            free(req);
 		}
 	}
 }
@@ -199,10 +202,10 @@ void *arpcache_sweep(void *arg)
         // 遍历待决包，如果等待时间超过1s，重发，如果重发次数超过5次，针对此包发送icmp包，并且删除掉此包
         struct arp_req *req = NULL;
         struct cached_pkt *pkt = NULL;
-        list_for_each_entry(req, &arpcache.req_list, list) {
+        list_for_each_entry(req, &(arpcache.req_list), list) {
             if(req->retries >= 5) {
                 pkt = NULL;
-                list_for_each_entry(pkt, &req->cached_packets, list) {       // 对每个包依次回复icmp
+                list_for_each_entry(pkt, &(req->cached_packets), list) {       // 对每个包依次回复icmp
                     printf("arp request failed, send icmp packet\n");
                     icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
                     list_delete_entry(&(pkt->list));
