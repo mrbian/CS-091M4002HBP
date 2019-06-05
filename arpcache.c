@@ -221,6 +221,8 @@ void *arpcache_sweep(void *arg)
                     printf("arp request retry one more time\n");
                     req->retries += 1;
                     arp_send_request(req->iface, req->ip4);     // 针对ip4重发arp请求
+                } else {
+                    printf("now is %ld, req->sent is %ld \n", (long)now, (long)req->sent);
                 }
             }
         }
