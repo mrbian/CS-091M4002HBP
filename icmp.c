@@ -45,8 +45,6 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 
                 packet_icmphdr->icmp_identifier = pkt_icmp_hdr->icmp_identifier;
 				packet_icmphdr->icmp_sequence = pkt_icmp_hdr->icmp_sequence;
-//				packet_icmphdr->icmp_identifier = ntohs(pkt_icmp_hdr->u.is.identifier);
-//				packet_icmphdr->icmp_sequence = ntohs(pkt_icmp_hdr->u.is.sequence);
 
                 // 需要request包的所有数据，这里必须是以packet和in_pkt为起始地址，而不能以packet_icmphdr（结构体类型）为起始地址，因为packet和in_pkt是char型指针，移动一个单位是一字节
 				memcpy(
@@ -55,10 +53,8 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
                         len - ETHER_HDR_SIZE - pkt_ip_hdr->ihl * 4 - sizeof(struct icmphdr)
                 );
 
-                // 设置checksum
-                packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, (int)packet_length - ETHER_HDR_SIZE - sizeof(struct iphdr));           // checksum自身不需要进行字节序转换，注意是根据本地字节序计算的checksum
-//                packet_icmphdr->icmp_identifier = htons(packet_icmphdr->u.is.identifier);
-//                packet_icmphdr->icmp_sequence = htons(packet_icmphdr->u.is.sequence);
+                // checksum自身不需要进行字节序转换，注意是根据网络字节序计算的checksum，而且计算的是所有的icmphdr，包括后来加上去的原包的ip header和数据域
+                packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, (int)packet_length - ETHER_HDR_SIZE - sizeof(struct iphdr));
 				break;
 			case 3:						// 目的不可达
 				// malloc an icmp packet
@@ -78,7 +74,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
                         in_pkt + ETHER_HDR_SIZE,
                         sizeof(struct iphdr)
                 );								// 需要原包的ip header和64bit的数据
-				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
+				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, (int)packet_length - ETHER_HDR_SIZE - sizeof(struct iphdr));		// 要在最后面设置checksum
 				break;
 			case 8:						// icmp请求
 				// todo
@@ -102,7 +98,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
                         in_pkt + ETHER_HDR_SIZE,
                         sizeof(struct iphdr)
                 );
-				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));		// 要在最后面设置checksum
+				packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, (int)packet_length - ETHER_HDR_SIZE - sizeof(struct iphdr));		// 要在最后面设置checksum
 				break;
 			default:
 				printf("unknown icmp type! \n");
