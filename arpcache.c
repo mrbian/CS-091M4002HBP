@@ -217,7 +217,7 @@ void *arpcache_sweep(void *arg)
 //                free(req);
             } else {
                 time(&now);
-                if((long)now - (long)req->sent > 1) {  // 如果超时1s，重发arp请求，且重发次数+1
+                if((long)now - (long)req->sent >= 1) {  // 如果超时1s，重发arp请求，且重发次数+1
                     printf("arp request retry one more time\n");
                     req->retries += 1;
                     arp_send_request(req->iface, req->ip4);     // 针对ip4重发arp请求
