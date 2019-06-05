@@ -44,15 +44,15 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				packet_icmphdr->icmp_identifier = pkt_icmp_hdr->icmp_identifier;
 				packet_icmphdr->icmp_sequence = pkt_icmp_hdr->icmp_sequence;
 
-                // 设置checksum
-                packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));
-
                 // 需要request包的所有数据，这里必须是以packet和in_pkt为起始地址，而不能以packet_icmphdr（结构体类型）为起始地址，因为packet和in_pkt是char型指针，移动一个单位是一字节
 				memcpy(
                         packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4 + sizeof(struct icmphdr),
                         in_pkt + ETHER_HDR_SIZE + pkt_ip_hdr->ihl * 4 + sizeof(struct icmphdr),
                         len - ETHER_HDR_SIZE - pkt_ip_hdr->ihl * 4 - sizeof(struct icmphdr)
                 );
+
+                // 设置checksum
+                packet_icmphdr->checksum = htons(icmp_checksum(packet_icmphdr, sizeof(struct icmphdr)));
 				break;
 			case 3:						// 目的不可达
 				// malloc an icmp packet
