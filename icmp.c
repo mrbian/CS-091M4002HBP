@@ -9,6 +9,7 @@
 #include <rtable.h>
 #include <base.h>
 #include <string.h>
+#include <icmp.h>
 
 // send icmp packet
 // 根据in_pkt（发送方的包）新建一个icmp包发出去
@@ -41,8 +42,8 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 				packet_icmphdr = (struct icmphdr *)(packet + ETHER_HDR_SIZE + packet_iphdr->ihl * 4);
 				packet_icmphdr->code = code;
 				packet_icmphdr->type = type;
-				packet_icmphdr->icmp_identifier = ntohs(pkt_icmp_hdr->icmp_identifier);
-				packet_icmphdr->icmp_sequence = ntohs(pkt_icmp_hdr->icmp_sequence);
+				packet_icmphdr->icmp_identifier = ntohs(pkt_icmp_hdr->u.is.identifier);
+				packet_icmphdr->icmp_sequence = ntohs(pkt_icmp_hdr->u.is.sequence);
 
                 // 需要request包的所有数据，这里必须是以packet和in_pkt为起始地址，而不能以packet_icmphdr（结构体类型）为起始地址，因为packet和in_pkt是char型指针，移动一个单位是一字节
 				memcpy(
@@ -53,8 +54,8 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 
                 // 设置checksum
                 packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));           // checksum自身不需要进行字节序转换，注意是根据本地字节序计算的checksum
-                packet_icmphdr->icmp_identifier = htons(pkt_icmp_hdr->icmp_identifier);
-                packet_icmphdr->icmp_sequence = htons(pkt_icmp_hdr->icmp_sequence);
+                packet_icmphdr->icmp_identifier = htons(packet_icmphdr->u.is.identifier);
+                packet_icmphdr->icmp_sequence = htons(packet_icmphdr->u.is.sequence);
 				break;
 			case 3:						// 目的不可达
 				// malloc an icmp packet

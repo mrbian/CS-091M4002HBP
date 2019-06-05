@@ -130,9 +130,7 @@ void iface_send_packet_by_arp(iface_info_t *iface, u32 dst_ip, char *packet, int
         memcpy(eh->ether_dhost, dst_mac, ETH_ALEN);
         iface_send_packet(iface, packet, len);
 	} else {
-        printf("iface_send_packet_by_arp \n");
 		arpcache_append_packet(iface, dst_ip, packet, len);             // append_packet里面已send了一次request了
-        printf("done \n");
 	}
 }
 
