@@ -94,7 +94,8 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
         if (ele->ip4 == ip4) {  // 若找到
             flag = 1;
             struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
-			new_pkt->packet = packet;
+            new_pkt->packet = (char *)malloc((size_t)len);
+            memcpy(new_pkt->packet, packet, len);
             new_pkt->len = len;
 			init_list_head(&new_pkt->list);
             list_add_tail(&new_pkt->list, &ele->cached_packets);                                                           // 将包对象串上去
@@ -115,7 +116,8 @@ void arpcache_append_packet(iface_info_t *iface, u32 ip4, char *packet, int len)
         // 再新建包对象并加入缓存对象的链表
         struct cached_pkt *new_pkt = (struct cached_pkt *)malloc(sizeof(struct cached_pkt));
 		// 给包对象初始化值
-		new_pkt->packet = packet;
+        new_pkt->packet = (char *)malloc((size_t)len);
+        memcpy(new_pkt->packet, packet, len);
         new_pkt->len = len;
         init_list_head(&new_pkt->list);
         list_add_tail(&new_pkt->list, &new_req->cached_packets);                                   // 将包对象串上去
