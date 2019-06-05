@@ -53,7 +53,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
                 );
 
                 // 设置checksum
-                packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, sizeof(struct icmphdr));           // checksum自身不需要进行字节序转换，注意是根据本地字节序计算的checksum
+                packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, (int)packet_length - ETHER_HDR_SIZE - sizeof(struct iphdr));           // checksum自身不需要进行字节序转换，注意是根据本地字节序计算的checksum
                 packet_icmphdr->icmp_identifier = htons(packet_icmphdr->u.is.identifier);
                 packet_icmphdr->icmp_sequence = htons(packet_icmphdr->u.is.sequence);
 				break;
