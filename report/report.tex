@@ -6,16 +6,16 @@
 \major{计算机体系结构}
 \name{卞留念}
 \title{实验报告}
-\stuid{3171002333}
-\college{信息与电子工程学院}
+\stuida{201828013229131}
+\stuidb{2018E8013261055}
+\college{计算机学院}
 \date{\zhtoday}
 \lab{寝室}
-\course{数字信号处理}
-\instructor{Hao}
-\grades{59}
-\expname{系统传输函数零极点分析}
+\course{计算机网络}
+\instructor{谢高岗}
+\expname{静态路由转发实验}
 \exptype{设计实验}
-\partner{nil}
+\partner{卫一宁}
 
 \begin{document}
 % =============================================
@@ -28,75 +28,114 @@
 % Part 2 Main document
 % =============================================
 
-\section{实验目的和要求}
-  系统差分方程和传输函数是线性系统的重要概念，通过分析系统差分方程和传输函数的特性，编程查看系统零极点分布，加深对线性系统的了解。
+\section{实验要求}
+  本实验要求学生在已有代码基础上，完善其中的TODO部分，实现路由器的IP查找转发、ARP请求和应答、ARP缓存管理、发送ICMP消息等功能。
 \section{实验内容和步骤}
 
-  \subsection{实验内容}
+  \subsection{实验内容一}
 
-      给出如下差分方程：
-      $$y(n) - (0.5+a)\times y(n-1) + 0.5ay(n-2) = x(n)$$
       \begin{enumerate}
-          \item 求解系统传输函数表达式。
-          \item 当 $a$ 取 $0.8, 0.9, 1.0, 1.1$时，画出零极点分布图。
-                \label{item:val}
-          \item 根据 \ref{item:val} 中 $a$ 的取值，分别画出幅频响应函数图像。
+          \item 运行给定网络拓扑(router\_topo.py)
+          \item Ping 10.0.1.1 (r1)，能够ping通
+          \item Ping 10.0.2.22 (h2)，能够ping通
+          \item Ping 10.0.3.33 (h3)，能够ping通
+          \item Ping 10.0.3.11，返回ICMP Destination Host Unreachable
+          \item Ping 10.0.4.1，返回ICMP Destination Net Unreachable
       \end{enumerate}
 
-  \subsection{实验步骤}
+  \subsection{实验内容二}
+
+
       \begin{enumerate}
-          \item 编写程序，求解零极点
-          \item 画出图形。
-          \item 观察结果。
+          \item 构造一个包含多个路由器节点组成的网络，手动配置每个路由器节点的路由表，有两个终端节点，通过路由器节点相连，两节点之间的跳数不少于3跳，手动配置其默认路由表
+          \item 终端节点ping每个路由器节点的入端口IP地址，能够ping通
+          \item 在一个终端节点上traceroute另一节点，能够正确输出路径上每个节点（入端口）的IP信息
       \end{enumerate}
 
 \section{主要仪器设备}
-  计算机，Matlab 软件
+  计算机，Mininet 软件，Wireshark 软件
 
-\section{操作方法和实验步骤}
-  \subsection{传输函数}
-      对差分方程进行处理，求出传输函数表达式。
-  \subsection{零极点分布图}
-      在此基础上，使用 Matlab 中的 \texttt{zplane} 函数进一步画出在不同 $a$ 取值情况下的零极点分布图。
-  \subsection{幅频响应}
-      之后使用 \texttt{freqz} 函数画出不同a取值情况下的频率响应图像。
+\section{实验步骤}
+  \subsection{安装mininet与wireshark软件}
+      下载并安装mininet与wireshark等软件。
+  \subsection{编写代码TODO部分}
+      根据所学知识完成代码的TODO部分。
+  \subsection{完成实验内容}
+      编译代码生成程序，在路由器节点上运行此程序，依次完成实验内容。
 
-\section{实验数据记录和处理}
-  \subsection{传输函数}
-      根据差分方程，传输函数如下：
-      $$H(z) = \frac{Y(z)}{X(z)} = \frac{z^2}{z^2-(0.5+a)z+0.5a}$$
-  \subsection{零极点分布图}
-      $a = 0.8, 0.9, 1.1$时，系统的零极点分布图及程序如下：
+\section{实验过程}
+  \subsection{安装mininet与wireshark软件}
+     在Ubuntu下输入sudo apt install mininet 与 sudo apt install build-essential xterm wireshark ethtool iperf traceroute iptables arptables命令进行软件安装，安装完成后，运行sudo mn验证mininet是否正确安装，验证结果如图~\ref{fig:install} 所示。
+           \begin{figure}[!htbp]
+               \centering
+               \includegraphics[width=0.7\linewidth]{figures/02.jpg}
+               \caption{mininet成功安装验证图}
+               \label{fig:install}
+           \end{figure}
+
+  \subsection{编写arpcache\_lookup函数}
+      \lstinputlisting[language=C]{code/arpcache_lookup.c}
+
+  \newpage
+  \subsection{编写arpcache\_append\_packet函数}
+      \lstinputlisting[language=C]{code/arpcache_append_packet.c}
+
+  \newpage
+  \subsection{编写arpcache\_insert函数}
+    \lstinputlisting[language=C]{code/arpcache_insert.c}
+
+  \newpage
+  \subsection{编写arpcache\_sweep函数}
+    \lstinputlisting[language=C]{code/arpcache_sweep.c}
+
+  \newpage
+  \subsection{编写arp\_send\_request函数}
+    \lstinputlisting[language=C]{code/arp_send_request.c}
+
+  \newpage
+  \subsection{编写arp\_send\_reply函数}
+    \lstinputlisting[language=C]{code/arp_send_reply.c}
+
+  \newpage
+  \subsection{编写handle\_arp\_packet函数}
+    \lstinputlisting[language=C]{code/handle_arp_packet.c}
+
+  \subsection{编写iface\_send\_packet\_by\_arp函数}
+    \lstinputlisting[language=C]{code/iface_send_packet_by_arp.c}
+
+  \newpage
+  \subsection{编写longest\_prefix\_match函数}
+    \lstinputlisting[language=C]{code/longest_prefix_match.c}
+
+  \subsection{编写handle\_ip\_packet函数}
+    \lstinputlisting[language=C]{code/handle_ip_packet.c}
+
+  \newpage
+  \subsection{编写icmp\_send\_packet函数}
+    \lstinputlisting[language=C]{code/icmp_send_packet.c}
+
+  \subsection{编写ip\_forward\_packet函数}
+    \lstinputlisting[language=C]{code/ip_forward_packet.c}
+
+  \newpage
+  \subsection{完成实验内容一}
       \begin{enumerate}
-          \item 图像如图~\ref{fig:dist} 所示。
+          \item 运行router\_topo.py生成的网络结构如图~\ref{fig:rtpy} 所示。
                 \begin{figure}[!htbp]
                     \centering
-                    \includegraphics[width=0.6\linewidth]{01.jpg}
-                    \caption{系统的零极点分布图}
-                    \label{fig:dist}
+                    \includegraphics[width=0.7\linewidth]{figures/rtpy.png}
+                    \caption{router\_topo.py生成的网络}
+                    \label{fig:rtpy}
                 \end{figure}
-          \item 代码
-                \lstinputlisting[language=MATLAB]{code/do.m}
+
       \end{enumerate}
 
-  \subsection{频率响应}
-      $a = 0.8, 0.9, 1.0, 1.1$时，系统的频率响应函数图形及程序如下：
-      \begin{enumerate}
-          \item 图像如图~\ref{fig:resp} 所示。
-                \begin{figure}[!htbp]
-                    \centering
-                    \includegraphics[width=0.6\linewidth]{02-1.jpg}
-                    \caption{系统的频率响应函数图形}
-                    \label{fig:resp}
-                \end{figure}
-          \item 代码
-                \lstinputlisting[language=MATLAB]{code/next.m}
-      \end{enumerate}
+  \subsection{完成实验内容二}
+
 
 \section{实验结果与分析}
 
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sit amet pharetra orci. Pellentesque ex est, ultricies non viverra sed, iaculis sed est. Suspendisse ex felis, aliquam et nulla in, vehicula gravida velit. In porttitor volutpat tincidunt. Aenean eleifend non augue sit amet ultrices. Proin rutrum odio vitae est luctus, eu facilisis leo dapibus. Aliquam commodo efficitur erat, sit amet pulvinar nulla ultrices ac. Vestibulum ullamcorper malesuada odio. Suspendisse id sollicitudin arcu. Nam fringilla commodo neque quis posuere. Sed lobortis justo nisl, ut molestie sapien semper ac. Proin in massa vel neque tempus porta id accumsan magna. Aliquam pharetra lacus ac arcu accumsan varius. Praesent condimentum mi vitae purus elementum imperdiet.
+\section{说明}
 
-  Etiam in bibendum arcu. Etiam porta metus ligula. Cras tempor, leo vel faucibus consequat, diam justo malesuada ex, et pretium risus est sit amet lectus. In sit amet efficitur quam. Maecenas quis molestie odio, et consectetur augue. Mauris erat erat, tristique a nunc in, molestie molestie lectus. Nullam commodo ornare urna, vel tincidunt libero aliquam ut. Ut hendrerit nunc id sapien tristique mollis. Aenean maximus, neque molestie dignissim cursus, augue neque dictum purus, vitae varius diam ex vitae est. Nulla bibendum facilisis semper. Nulla placerat ultricies lorem, quis consequat metus pulvinar eu. Morbi sed massa arcu. Nulla sagittis felis a suscipit elementum.
 
 \end{document}

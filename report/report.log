@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.21)  22 MAY 2019 16:50
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.21)  5 JUN 2019 16:14
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -758,28 +758,6 @@ File: figures/coverx.png Graphic file (type bmp)
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <15.05624> not available
 (Font)              size <14.4> substituted on input line 24.
 
-./report.tex:24: Undefined control sequence.
-\makecover ...ne {2-2} \bfseries {学号：} & \@stuida 
-                                                  \\ \cline {2-2} \bfseries ...
-l.24 \makecover
-               
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./report.tex:24: Undefined control sequence.
-\makecover ...cline {2-2} \bfseries {} & \@stuidb 
-                                                  \\ \cline {2-2} \end {tabu...
-l.24 \makecover
-               
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
 [1
 
 ]
@@ -791,17 +769,7 @@ LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <10.53937> not available
 (Font)              size <10.95> substituted on input line 25.
 
 
-Overfull \hbox (3.77557pt too wide) detected at line 25
- \TU/STSong(0)/m/n/10.53937 计 算 机 体 系 结 构 
- []
-
-
-Overfull \hbox (10.20465pt too wide) detected at line 25
- \TU/lmr/m/n/10.53937 2019 \TU/STSong(0)/m/n/10.53937 年 \TU/lmr/m/n/10.53937 5 \TU/STSong(0)/m/n/10.53937 月 \TU/lmr/m/n/10.53937 22 \TU/STSong(0)/m/n/10.53937 日 
- []
-
-
-Overfull \hbox (5.53996pt too wide) in alignment at lines 25--25
+Overfull \hbox (20.53996pt too wide) in alignment at lines 25--25
 [][] 
  []
 
@@ -811,10 +779,18 @@ Overfull \hbox (2.33974pt too wide) in paragraph at lines 25--25
  []
 
 
-Overfull \hbox (9.40811pt too wide) in alignment at lines 25--25
+Overfull \hbox (21.3486pt too wide) in alignment at lines 25--25
 [][][][][][] 
  []
 
+[2]
+File: figures/02.jpg Graphic file (type bmp)
+<figures/02.jpg>
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2019/02/27 1.8b listings language file
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2019/02/27 1.8b (Carsten Heinz)
+)
 
 Package fontspec Warning: Font "STFangsong" does not contain requested Script
 (fontspec)                "CJK".
@@ -841,34 +817,29 @@ Package fontspec Info: Font family 'STFangsong(0)' created for font
 (fontspec)             - 'normal' (m/n) with NFSS spec.: <->"STFangsong/OT"
 (fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
 
-[2]
-File: figures/01.jpg Graphic file (type bmp)
-<figures/01.jpg>
- (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2019/02/27 1.8b listings language file
-) (./code/do.m
+(./code/arpcache_lookup.c)
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
 Make it at least 12.64723pt.
 We now make it that large for the rest of the document.
 This may cause the page layout to be inconsistent, however.
 
-[3])
-File: figures/02-1.jpg Graphic file (type bmp)
-<figures/02-1.jpg>
- (./code/next.m [4]) [5] [6] (./report.aux)
+[3] (./code/arpcache_append_packet.c) [4] (./code/arpcache_insert.c) [5] (./code/arpcache_sweep.c) [6] (./code/arp_send_request.c) [7] (./code/arp_send_reply.c) [8] (./code/handle_arp_packet.c) (./code/iface_send_packet_by_arp.c) [9] (./code/longest_prefix_match.c) (./code/handle_ip_packet.c) [10] (./code/icmp_send_packet.c [11] [12]) (./code/ip_forward_packet.c) [13]
+File: figures/rtpy.png Graphic file (type bmp)
+<figures/rtpy.png>
+ [14] (./report.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.65625pt have occurred.
 
  ) 
 Here is how much of TeX's memory you used:
- 21175 strings out of 492916
- 452152 string characters out of 6133345
- 736277 words of memory out of 5000000
- 24984 multiletter control sequences out of 15000+600000
+ 21045 strings out of 492916
+ 455244 string characters out of 6133345
+ 754205 words of memory out of 5000000
+ 24820 multiletter control sequences out of 15000+600000
  537721 words of font info for 77 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 66i,14n,75p,817b,2445s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 66i,14n,75p,817b,1776s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on report.xdv (6 pages, 61692 bytes).
+Output written on report.xdv (14 pages, 319224 bytes).

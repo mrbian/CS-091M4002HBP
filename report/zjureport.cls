@@ -80,8 +80,8 @@
 % 页眉
 \pagestyle{fancy}
 \lhead{实验名称：\@expname}
-\chead{姓名：\@name}
-\rhead{学号：\@stuid}
+\chead{\@course}
+\rhead{姓名：\@name \ \@partner}
 
 % 下划线定义
 \def\zjuu[#1]#2{
@@ -97,11 +97,12 @@
   \begin{minipage}{.3\linewidth}
     \raggedleft
     \begin{tabular*}{.8\linewidth}{ll}
-      专业： & \zjuu[70pt]\@major   \\
-      姓名： & \zjuu[70pt]\@name    \\
-      学号： & \zjuu[70pt]\@stuid   \\
-      日期： & \zjuu[70pt]\@date \\
-      地点： & \zjuu[70pt]\@lab
+      专业： & \zjuu[85pt]\@major   \\
+      姓名： & \zjuu[85pt]\@name    \\
+            & \zjuu[85pt]\@partner  \\
+      学号： & \zjuu[85pt]\@stuida   \\
+            & \zjuu[85pt]\@stuidb   \\
+      日期： & \zjuu[85pt]\@date \\
     \end{tabular*}
   \end{minipage}
 \end{figure}
@@ -109,8 +110,7 @@
 \begin{table}[!htbp]
   \centering
   \begin{tabular*}{\linewidth}{llllll}
-    课程名称： & \zjuu[150pt]\@course   & 指导老师： & \zjuu[50pt]\@instructor   & 成绩：       &  \zjuu[50pt]\@grades \\
-    实验名称： & \zjuu[150pt]\@expname & 实验类型： &\zjuu[50pt]\@exptype & 同组学生姓名：& \zjuu[50pt]\@partner
+    课程名称： & \zjuu[90pt]\@course & \ 实验名称： & \zjuu[140pt]\@expname & \ 指导老师： & \zjuu[46pt]\@instructor
   \end{tabular*}
 \end{table}
 \thispagestyle{empty}
@@ -135,11 +135,12 @@
       \renewcommand\arraystretch{1.6}
       \begin{tabular}{p{3cm}p{6cm}}
         \bfseries{课程名称：} & \@course \\ \cline{2-2}
-        \bfseries{姓名：}     & \@name   \\ \cline{2-2}
         \bfseries{学院：}     & \@college \\ \cline{2-2}
         \bfseries{专业：}     & \@major  \\ \cline{2-2}
+        \bfseries{姓名：}     & \@name   \\ \cline{2-2}
+        \bfseries{}          & \@partner   \\ \cline{2-2}
         \bfseries{学号：}     & \@stuida  \\ \cline{2-2}
-        \bfseries{} & \@stuidb  \\ \cline{2-2}
+        \bfseries{}          & \@stuidb  \\ \cline{2-2}
       \end{tabular}
     \end{center}
     \vspace{2cm}
