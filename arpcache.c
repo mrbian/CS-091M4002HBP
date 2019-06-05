@@ -11,7 +11,7 @@
 #include <signal.h>
 #include <arpcache.h>
 
-static arpcache_t arpcache;  // todo: 使用static修饰以后，就只能在本源文件中可见，并不能在整个工程中可见。
+static arpcache_t arpcache;  // 使用static修饰以后，就只能在本源文件中可见，并不能在整个工程中可见。
 							 //		  如果不加static，所有函数，变量默认都是extern修饰的。可以在其他文件中被引入。
 
 // initialize IP->mac mapping, request list, lock and sweeping thread
@@ -19,7 +19,7 @@ void arpcache_init()
 {
 	bzero(&arpcache, sizeof(arpcache_t));
 
-	init_list_head(&(arpcache.req_list));   // todo: 难道说malloc了一个struct，内部的各种结构体都自动malloc了？答：是的，但必须是结构体变量
+	init_list_head(&(arpcache.req_list));
 
 	pthread_mutex_init(&arpcache.lock, NULL);
 
@@ -182,7 +182,6 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 // request has been sent 5 times without receiving arp reply, for each
 // pending packet, send icmp packet (DEST_HOST_UNREACHABLE), and drop these
 // packets.
-// todo: 这里需要测试
 void *arpcache_sweep(void *arg)
 {
     int i = 0;
@@ -203,6 +202,7 @@ void *arpcache_sweep(void *arg)
         struct cached_pkt *pkt = NULL;
         list_for_each_entry(req, &arpcache.req_list, list) {
             if(req->retries >= 5) {
+                printf("??? \n");
                 pkt = NULL;
                 list_for_each_entry(pkt, &req->cached_packets, list) {       // 对每个包依次回复icmp
                     printf("arp request failed, send icmp packet\n");
@@ -210,6 +210,7 @@ void *arpcache_sweep(void *arg)
                 }
                 list_delete_entry(&req->list);          // 删除该项
             } else {
+                printf("= - = \n");
                 time(&now);
                 if((long)now - (long)req->sent > 1) {  // 如果超时1s，重发arp请求，且重发次数+1，重发时间重置
                     printf("arp request retry one more time\n");
