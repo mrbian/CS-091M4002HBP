@@ -205,6 +205,7 @@ void *arpcache_sweep(void *arg)
                 list_for_each_entry(pkt, &req->cached_packets, list) {       // 对每个包依次回复icmp
                     printf("arp request failed, send icmp packet\n");
                     icmp_send_packet(pkt->packet, pkt->len, 3, 1);  // type = 3, code = 1, 告知arp查询失败
+                    list_delete_entry(&pkt->list);
                 }
                 list_delete_entry(&req->list);          // 删除该项
             } else {
