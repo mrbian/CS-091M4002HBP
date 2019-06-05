@@ -185,7 +185,6 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 void *arpcache_sweep(void *arg)
 {
     int i = 0;
-    int j = 0;
     time_t now;
 	while (1) {
 		sleep(1);
