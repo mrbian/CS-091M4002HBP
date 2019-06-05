@@ -162,7 +162,6 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 	struct cached_pkt *pkt = NULL, *pkt_q;
 	list_for_each_entry_safe(req, req_q, &(arpcache.req_list), list) {
 		if(req->ip4 == ip4) {
-            printf("cache insert will send packet\n");
 			pkt = NULL;
 			list_for_each_entry_safe(pkt, pkt_q, &(req->cached_packets), list) {   // 填充好MAC地址然后依次发送出去
                 struct ether_header * eh = (struct ether_header *)(pkt->packet);
@@ -204,7 +203,6 @@ void *arpcache_sweep(void *arg)
         struct arp_req *req = NULL, *req_q;
         struct cached_pkt *pkt = NULL, *pkt_q;
         list_for_each_entry_safe(req, req_q, &(arpcache.req_list), list) {
-            printf("cache sweep will send packet\n");
             if(req->retries >= 5) {
                 pkt = NULL;
                 list_for_each_entry_safe(pkt, pkt_q, &(req->cached_packets), list) {       // 对每个包依次回复icmp
