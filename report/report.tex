@@ -1,4 +1,5 @@
 \documentclass{zjureport}
+\usepackage{hyperref}
 % =============================================
 % Part 0 Edit the info
 % =============================================
@@ -69,7 +70,7 @@
            \begin{figure}[!htbp]
                \centering
                \includegraphics[width=0.7\linewidth]{figures/02.jpg}
-               \caption{mininet成功安装验证图}
+               \caption{mininet安装成功}
                \label{fig:install}
            \end{figure}
 
@@ -117,10 +118,13 @@
   \subsection{编写ip\_forward\_packet函数}
     \lstinputlisting[language=C]{code/ip_forward_packet.c}
 
+
+
   \newpage
-  \subsection{完成实验内容一}
+  \section{实验结果与分析}
+  \subsection{实验一}
       \begin{enumerate}
-          \item 运行router\_topo.py生成的网络结构如图~\ref{fig:rtpy} 所示。
+          \item 运行router\_topo.py生成的网络如图~\ref{fig:rtpy} 所示。
                 \begin{figure}[!htbp]
                     \centering
                     \includegraphics[width=0.7\linewidth]{figures/rtpy.png}
@@ -128,14 +132,95 @@
                     \label{fig:rtpy}
                 \end{figure}
 
+          \item 实验一(2)-(6)ping结果如图~\ref{fig:e1result} 所示。
+                \begin{figure}[!htbp]
+                    \centering
+                    \includegraphics[width=0.7\linewidth]{e1result.png}
+                    \caption{实验一(2)-(6)ping程序结果}
+                    \label{fig:e1result}
+                \end{figure}
+
+         \item 实验一(2)-(6)路由程序运行结果如图~\ref{fig:e1program}所示。
+                 \begin{figure}[!htbp]
+                     \centering
+                     \includegraphics[width=0.7\linewidth]{e1program.png}
+                     \caption{实验一(2)-(6)路由程序运行结果}
+                     \label{fig:e1program}
+                 \end{figure}
+
       \end{enumerate}
 
-  \subsection{完成实验内容二}
+  \newpage
+  \subsection{实验二}
+      \begin{enumerate}
+          \item 根据要求编写router\_topo2.py, 代码如下。
+                \lstinputlisting[language=Python]{code/router_topo2.py}
 
+          \item router\_topo2.py生成的网络如图~\ref{fig:rtpy2} 所示。
+                \begin{figure}[!htbp]
+                    \centering
+                    \includegraphics[width=0.9\linewidth]{figures/rtpy2.png}
+                    \caption{router\_topo2.py生成的网络}
+                    \label{fig:rtpy2}
+                \end{figure}
 
-\section{实验结果与分析}
+          \item 实验二(2)ping结果如图~\ref{fig:e2pingresult} 所示。
+                \begin{figure}[!htbp]
+                    \centering
+                    \includegraphics[width=0.7\linewidth]{figures/e2result1.png}
+                    \caption{实验二(2)ping程序结果}
+                    \label{fig:e2pingresult}
+                \end{figure}
 
-\section{说明}
+         \item 实验二(2)traceroute结果如图~\ref{fig:e2tracerouteresult}所示。
+               \begin{figure}[!htbp]
+                   \centering
+                   \includegraphics[width=0.7\linewidth]{figures/e2result2.png}
+                   \caption{实验二(3)traceroute程序结果}
+                   \label{fig:e2tracerouteresult}
+               \end{figure}
 
+         \item 实验二(2)-(3)路由1程序运行结果如图~\ref{fig:e2program1}所示。
+                 \begin{figure}[!htbp]
+                     \centering
+                     \includegraphics[width=0.7\linewidth]{figures/e2program1.png}
+                     \caption{实验二(2)-(3)路由1程序运行结果}
+                     \label{fig:e2program1}
+                 \end{figure}
+
+        \item 实验二(2)-(3)路由2程序运行结果如图~\ref{fig:e2program2}所示。
+                \begin{figure}[!htbp]
+                    \centering
+                    \includegraphics[width=0.7\linewidth]{figures/e2program2.png}
+                    \caption{实验二(2)-(3)路由2程序运行结果}
+                    \label{fig:e2program2}
+                \end{figure}
+
+        \item 实验二(2)-(3)路由3程序运行结果如图~\ref{fig:e2program3}所示。
+                \begin{figure}[!htbp]
+                    \centering
+                    \includegraphics[width=0.7\linewidth]{figures/e2program3.png}
+                    \caption{实验二(2)-(3)路由3程序运行结果}
+                    \label{fig:e2program3}
+                \end{figure}
+
+      \end{enumerate}
+
+   \newpage
+   \section{其他}
+   \subsection{不足}
+      本实验完成的不足之处有：arp缓存表的替换算法应该是随机替换，而代码中实现的是先入先出；arp缓存没有释放缓存包和缓存条目的内存，有内存泄露问题。
+
+   \subsection{疑问}
+      为什么实验一和实验二只能ping通入端口，不能ping通出端口？实验二两个主机节点也相互ping不通（router-reference也是如此）。
+
+   \subsection{收获}
+      通过对icmp协议和arp协议底层的代码书写，深刻学习了icmp协议和arp协议的机制。
+
+   \subsection{想法}
+      mininet软件对于底层测试不够友好，没有集成的GUI界面，测试的自动化程度不够，修改一处代码以后，需要手动在mininet里重启应用，需要手动发包，需要手动使用wireshark查看包，自动化程度太低，制约了生产力。
+
+   \subsection{说明}
+     报告文档通过tex程序输出，源文件在代码目录的report目录下；代码可以在Ubuntu下通过make router命令编译链接生成可执行程序；代码仓库地址：\url{https://github.com/mrbian/091M4002HBP}。联系邮箱为：\url{mrbianliunian@outlook.com}。
 
 \end{document}

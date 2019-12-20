@@ -1,13 +1,13 @@
 void arp_send_request(iface_info_t *iface, u32 dst_ip)
 {
-    // 包装好一个arp请求包，并且把它发出去（注意要把以太网首部也带上）
+    // encapsulate an arp reply and send it out
     char *packet = (char *)malloc(sizeof(struct ether_header) + sizeof(struct ether_arp));
     bzero(packet, sizeof(struct ether_header) + sizeof(struct ether_arp));
 
     struct ether_header *eh = (struct ether_header *)packet;
     struct ether_arp *ea = packet_to_arp_hdr(packet);
 
-    // 设置各项的值
+    // set value
     // ether
     memcpy(eh->ether_shost, iface->mac, ETH_ALEN);
     int i;
@@ -26,9 +26,9 @@ void arp_send_request(iface_info_t *iface, u32 dst_ip)
     ea->arp_spa = htonl(iface->ip);
     memcpy(ea->arp_sha, iface->mac, ETH_ALEN);
     ea->arp_tpa = htonl(dst_ip);
-    // tha置空（00 00 00 00 00 00）
+    // tha（00 00 00 00 00 00）
     printf("arp request for target ip address: %x is sending \n", dst_ip);
 
-    // 发送出去
+    // send it out
     iface_send_packet(iface, packet, (int)(sizeof(struct ether_header) + sizeof(struct ether_arp)));
 }

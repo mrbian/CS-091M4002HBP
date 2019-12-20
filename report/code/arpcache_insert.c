@@ -1,6 +1,6 @@
 void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
 {
-    // 查找是否已有ip4对应的条目，若有，则替换掉
+    // check is there has been one item with given ipv4 addr, if yes, replace it
     int i = 0;
     int flag = 0;
     for (i = 0; i < MAX_ARP_SIZE; i += 1) {
@@ -13,8 +13,7 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
     }
 
     if(flag == 0) {
-        // 如果没有，创建一个，放到第一个的位置，其他项依次向后移动一位
-        // 将最新的内容放到前面，先入先出
+        // if no, create one, put it in the first place, FIFO
         struct arp_cache_entry *entry = (struct arp_cache_entry *)malloc(sizeof(struct arp_cache_entry));
         entry->ip4 = ip4;
         memcpy(entry->mac, mac, ETH_ALEN);
@@ -26,7 +25,6 @@ void arpcache_insert(u32 ip4, u8 mac[ETH_ALEN])
         arpcache.entries[0] = *entry;
     }
 
-    // 遍历缓存列表，如果有对应IP地址的待决包，将MAC地址填充好发送出去
     struct arp_req *req = NULL;
     struct cached_pkt *pkt = NULL;
     list_for_each_entry(req, &arpcache.req_list, list) {

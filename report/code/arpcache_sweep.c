@@ -4,7 +4,7 @@ void *arpcache_sweep(void *arg)
     time_t now;
     while (1) {
         sleep(1);
-        // 遍历arp缓存，删除超过15s的旧条目
+        // traverse arp cache, delete item which has been staying over 15s
         for(i = 0; i < MAX_ARP_SIZE; i += 1) {
             time(&now);
             if((long)now - (long)arpcache.entries[i].added > 15) {
@@ -12,8 +12,8 @@ void *arpcache_sweep(void *arg)
             }
         }
 
-        // 遍历待决包，如果等待时间超过1s，重发
-        // 如果重发次数超过5次，针对此包发送icmp包
+        // traverse packet list, if waiting time is more than 1s, re-send it
+        // if retries over 5 times, send icmp packet
         struct arp_req *req = NULL, *req_q;
         struct cached_pkt *pkt = NULL, *pkt_q;
         list_for_each_entry_safe(req, req_q, &(arpcache.req_list), list) {

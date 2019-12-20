@@ -1,6 +1,6 @@
 void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 {
-    // 获取到ip目的地址
+    // get ip destination addr
     struct iphdr * pkt_ip_hdr = packet_to_ip_hdr(in_pkt);
     struct icmphdr * pkt_icmp_hdr = (struct icmphdr *)(in_pkt + ETHER_HDR_SIZE + pkt_ip_hdr->ihl * 4);
 
@@ -10,7 +10,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
         char * packet;
         struct iphdr * packet_iphdr;
         struct icmphdr * packet_icmphdr;
-        // 判断类型对数据域进行分类处理
+        // judge type and process
         switch(type) {
             case 0:
                 // malloc an icmp packet
@@ -34,7 +34,7 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
 
                 packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, (int)packet_length - ETHER_HDR_SIZE - sizeof(struct iphdr));
                 break;
-            case 3:						// 目的不可达
+            case 3:						// dst unreachable
                 // malloc an icmp packet
                 // ip header
                 packet_length = (size_t)(ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr) + sizeof(struct iphdr) + 8);
@@ -53,11 +53,11 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
                 );
                 packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, (int)packet_length - ETHER_HDR_SIZE - sizeof(struct iphdr));
                 break;
-            case 8:						// icmp请求
+            case 8:						// icmp request
                 // todo
                 printf("this packet icmp type is 8, todo \n");
                 break;
-            case 11:				// 超时
+            case 11:				// ttl exceed
                 // malloc an icmp packet
                 // ip header
                 packet_length = (size_t)(ETHER_HDR_SIZE + sizeof(struct iphdr) + sizeof(struct icmphdr) + sizeof(struct iphdr) + 8);
@@ -74,13 +74,13 @@ void icmp_send_packet(const char *in_pkt, int len, u8 type, u8 code)
                         in_pkt + ETHER_HDR_SIZE,
                         sizeof(struct iphdr) + 8
                 );
-                packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, (int)packet_length - ETHER_HDR_SIZE - sizeof(struct iphdr));		// 要在最后面设置checksum
+                packet_icmphdr->checksum = icmp_checksum(packet_icmphdr, (int)packet_length - ETHER_HDR_SIZE - sizeof(struct iphdr));
                 break;
             default:
                 printf("unknown icmp type! \n");
                 return;
         }
 
-        iface_send_packet_by_arp(rt->iface, ntohl(pkt_ip_hdr->saddr), packet, (int)packet_length);		// 发送
+        iface_send_packet_by_arp(rt->iface, ntohl(pkt_ip_hdr->saddr), packet, (int)packet_length);
     }
 }
